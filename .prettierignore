@@ -1,0 +1,5 @@
+config/
+node-modules/
+scripts/
+public/
+package.json
