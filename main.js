@@ -1,8 +1,8 @@
 require('core-js/stable');
 const path = require('path');
 const url = require('url');
-const { autoUpdater } = require('electron-updater');
 const log = require('electron-log');
+const { autoUpdater } = require('electron-updater');
 const { app, BrowserWindow, shell } = require('electron');
 
 const AppUpdater = {
@@ -40,12 +40,12 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     show: true,
+    resizable: true,
     width: 1024,
     height: 728,
     // https://github.com/electron/electron/issues/23506
     // nodeJS API를 사용 가능하게하는 코드입니다.
     webPreferences: {
-      sandbox: true,
       contextIsolation: true,
       // 웹 애플리케이션을 데스크탑으로 모양만 바꾸려면 안 해도 되지만,
       // Node 환경처럼 사용하려면 (Node에서 제공되는 빌트인 패키지 사용 포함)
@@ -68,7 +68,9 @@ const createWindow = async () => {
     });
 
   mainWindow.loadURL(startUrl);
-  mainWindow.webContents.openDevTools();
+  if (process.env.NODE_ENV === 'development') {
+    mainWindow.webContents.openDevTools();
+  }
   mainWindow.webContents.on('did-finish-load', () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
