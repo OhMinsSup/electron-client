@@ -33,5 +33,7 @@ module.exports = {
     'no-use-before-define': 'off',
     // require
     'global-require': 'off',
+    //jsx a11y
+    'jsx-a11y/label-has-associated-control': 'off',
   },
 };
