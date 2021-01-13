@@ -10,7 +10,7 @@ import '@zoomus/websdk/dist/css/react-select.css';
 import '@zoomus/websdk/dist/css/bootstrap.css';
 import { ZoomContextProvider } from './libs/context/ZoomContext';
 
- const queryClient = new QueryClient();
+const queryClient = new QueryClient();
 
 ReactDOM.render(
   <React.StrictMode>
@@ -24,7 +24,6 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById('root'),
 );
-
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

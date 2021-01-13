@@ -1,11 +1,11 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { ZoomMtg } from '@zoomus/websdk';
 import { Route, Switch } from 'react-router-dom';
 import MainPage from './pages/MainPage';
 import MeetingPage from './pages/MeetingPage';
 
 function App() {
-  const initRef = useRef(false);
+  const initRef = React.useRef(false);
 
   React.useEffect(() => {
     if (initRef.current) return;
