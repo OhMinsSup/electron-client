@@ -1,12 +1,12 @@
 import { ZoomMtg } from '@zoomus/websdk';
 import React from 'react';
-// import { useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useZoomDispatch, ZoomOptions } from '../libs/context/ZoomContext';
 import useForm from '../libs/hooks/useForm';
 
 interface MainPageProps {}
 const MainPage: React.FC<MainPageProps> = () => {
-//   const history = useHistory();
+  const history = useHistory();
   const [state, onChange, onReset] = useForm<ZoomOptions>({
     displayName: '1.8.6#Local',
     password: '',
@@ -43,8 +43,7 @@ const MainPage: React.FC<MainPageProps> = () => {
           ],
         });
 
-        // history.push('/metting');
-        
+        history.push('/metting');
       },
     });
   }, [state]);
