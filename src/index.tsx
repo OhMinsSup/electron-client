@@ -7,6 +7,7 @@ import reportWebVitals from './reportWebVitals';
 import './styles/styles.css';
 
 import { ZoomContextProvider } from './libs/context/ZoomContext';
+import { UserContextProvider } from './libs/context/UserContext';
 
 const queryClient = new QueryClient();
 
@@ -14,9 +15,11 @@ ReactDOM.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <ZoomContextProvider>
-          <App />
-        </ZoomContextProvider>
+        <UserContextProvider>
+          <ZoomContextProvider>
+            <App />
+          </ZoomContextProvider>
+        </UserContextProvider>
       </BrowserRouter>
     </QueryClientProvider>
   </React.StrictMode>,
