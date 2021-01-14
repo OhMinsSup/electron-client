@@ -1,6 +1,9 @@
-import { ZoomMtg } from '@zoomus/websdk';
+
 import React from 'react';
-import { useZoomState } from '../libs/context/ZoomContext';
+import { ZoomMtg as ZoomMtgType } from '@zoomus/websdk';
+import { useZoomDispatch, useZoomState } from '../libs/context/ZoomContext';
+
+declare const ZoomMtg: typeof ZoomMtgType;
 
 const b64EncodeUnicode = (str: string) =>
   btoa(
@@ -12,12 +15,28 @@ const b64EncodeUnicode = (str: string) =>
 interface MeetingPageProps {}
 const MeetingPage: React.FC<MeetingPageProps> = () => {
   const state = useZoomState();
-  const zoomRef = React.useRef(false);
+  const dispatch = useZoomDispatch();
 
   React.useEffect(() => {
-    if (zoomRef.current) return;
+    if (!state.signature || !state.apiKey) {
+      const stringify = localStorage.getItem('@@zoom');
+      if (stringify) {
+        const json = JSON.parse(stringify);
+        const payload: { key: any; value: any }[] = [];
+        Object.entries(json).forEach(([key, value]) =>
+          payload.push({ key, value }),
+        );
+        dispatch({
+          type: 'ALL_CHANGE',
+          payload,
+        });
+      }
+    }
+  }, [dispatch]);
+
+  React.useEffect(() => {
     ZoomMtg.init({
-      leaveUrl: '/',
+      leaveUrl: 'http://localhost:4000',
       success: () => {
         ZoomMtg.i18n.load(state.lang);
         ZoomMtg.i18n.reload(state.lang);
@@ -28,8 +47,14 @@ const MeetingPage: React.FC<MeetingPageProps> = () => {
           userName: b64EncodeUnicode(state.displayName),
           apiKey: state.apiKey,
           passWord: state.password,
-          success: (res: any) => {
-            console.log('success User', res.result.currentUser);
+          userEmail: state.email,
+          success: () => {
+            ZoomMtg.getAttendeeslist({});
+            ZoomMtg.getCurrentUser({
+              success: (res: any) => {
+                console.log('success getCurrentUser', res.result.currentUser);
+              },
+            });
           },
           error: (error: any) => {
             console.error(error);
@@ -40,7 +65,7 @@ const MeetingPage: React.FC<MeetingPageProps> = () => {
         console.error(error);
       },
     });
-  }, []);
+  }, [state]);
   return <div>MeetingPage</div>;
 };
 

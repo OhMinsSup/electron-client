@@ -1,19 +1,17 @@
 import React from 'react';
-import { ZoomMtg } from '@zoomus/websdk';
+import { ZoomMtg as ZoomMtgType } from '@zoomus/websdk'
 import { Route, Switch } from 'react-router-dom';
 import MainPage from './pages/MainPage';
 import MeetingPage from './pages/MeetingPage';
 
+declare const ZoomMtg: typeof ZoomMtgType;
+
+console.log((ZoomMtg as any).checkSystemRequirements());
+ZoomMtg.setZoomJSLib('https://source.zoom.us/1.8.5/lib', '/av');
+ZoomMtg.preLoadWasm();
+ZoomMtg.prepareJssdk();
+
 function App() {
-  const initRef = React.useRef(false);
-
-  React.useEffect(() => {
-    if (initRef.current) return;
-    ZoomMtg.preLoadWasm();
-    ZoomMtg.prepareJssdk();
-    initRef.current = true;
-  }, []);
-
   return (
     <Switch>
       <Route path="/" component={MainPage} exact />

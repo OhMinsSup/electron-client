@@ -1,13 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { HashRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './styles/styles.css';
 
-import '@zoomus/websdk/dist/css/react-select.css';
-import '@zoomus/websdk/dist/css/bootstrap.css';
 import { ZoomContextProvider } from './libs/context/ZoomContext';
 
 const queryClient = new QueryClient();
@@ -15,11 +13,11 @@ const queryClient = new QueryClient();
 ReactDOM.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <HashRouter>
+      <BrowserRouter>
         <ZoomContextProvider>
           <App />
         </ZoomContextProvider>
-      </HashRouter>
+      </BrowserRouter>
     </QueryClientProvider>
   </React.StrictMode>,
   document.getElementById('root'),

@@ -1,9 +1,10 @@
-import { ZoomMtg } from '@zoomus/websdk';
 import React from 'react';
+import { ZoomMtg as ZoomMtgType } from '@zoomus/websdk';
 import { useHistory } from 'react-router-dom';
-// eslint-disable-next-line no-unused-vars
 import { useZoomDispatch, ZoomOptions } from '../libs/context/ZoomContext';
 import useForm from '../libs/hooks/useForm';
+
+declare const ZoomMtg: typeof ZoomMtgType;
 
 const config = {
   ZOOM_API_KEY: '',
@@ -33,21 +34,29 @@ const MainPage: React.FC<MainPageProps> = () => {
       apiSecret: `${ZOOM_SECRET_KEY}`,
       role: state.role,
       success: (res: any) => {
-        console.log(res);
+        const payload: { key: any; value: any }[] = [
+          { key: 'apiKey', value: config.ZOOM_API_KEY },
+          { key: 'signature', value: res.result },
+          { key: 'displayName', value: state.displayName },
+          { key: 'password', value: state.password },
+          { key: 'meetingNumber', value: state.meetingNumber },
+          { key: 'email', value: state.email },
+          { key: 'role', value: state.role },
+          { key: 'i18n', value: state.i18n },
+          { key: 'lang', value: state.lang },
+        ];
+
+        const obj = {};
+        payload.forEach((data) => {
+          Object.assign(obj, { [data.key]: data.value });
+        });
+
         dispatch({
           type: 'ALL_CHANGE',
-          payload: [
-            { key: 'apiKey', value: config.ZOOM_API_KEY },
-            { key: 'signature', value: res.result },
-            { key: 'displayName', value: state.displayName },
-            { key: 'password', value: state.password },
-            { key: 'meetingNumber', value: state.meetingNumber },
-            { key: 'email', value: state.email },
-            { key: 'role', value: state.role },
-            { key: 'i18n', value: state.i18n },
-            { key: 'lang', value: state.lang },
-          ],
+          payload,
         });
+
+        localStorage.setItem('@@zoom', JSON.stringify(obj));
         history.push('/metting');
       },
     });
