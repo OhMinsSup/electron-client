@@ -2,7 +2,7 @@
   "name": "zoom-client",
   "version": "0.1.0",
   "private": true,
-  "main": "main.js",
+  "main": "index.electron.js",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
@@ -15,12 +15,16 @@
     "@zoomus/websdk": "^1.8.6",
     "autoprefixer": "^10.2.1",
     "axios": "^0.21.1",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "dotenv": "^8.2.0",
     "electron-debug": "^3.2.0",
     "electron-log": "^4.3.1",
     "electron-updater": "^4.3.5",
     "env-cmd": "^10.1.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
     "postcss": "^8.2.4",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
@@ -32,6 +36,7 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
+    "start:server": "cross-env NODE_ENV=development nodemon index.server.js",
     "start:main": "cross-env NODE_ENV=development ELECTRON_START_URL=http://localhost:4000 electron -r ./scripts/babel-register.js  .",
     "tailwind:build": "tailwind build ./src/styles/tailwind.css -o ./src/styles/styles.css",
     "start": "dotenv -e .env.development react-scripts start",
@@ -78,6 +83,7 @@
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "nodemon": "^2.0.7",
     "prettier": "^2.2.1",
     "wait-on": "^5.2.1"
   }

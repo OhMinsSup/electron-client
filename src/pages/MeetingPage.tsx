@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ZoomMtg as ZoomMtgType } from '@zoomus/websdk';
 import { useZoomDispatch, useZoomState } from '../libs/context/ZoomContext';
@@ -48,7 +47,8 @@ const MeetingPage: React.FC<MeetingPageProps> = () => {
           apiKey: state.apiKey,
           passWord: state.password,
           userEmail: state.email,
-          success: () => {
+          success: (joinRes: any) => {
+            console.log("success joinRes", joinRes);
             ZoomMtg.getAttendeeslist({});
             ZoomMtg.getCurrentUser({
               success: (res: any) => {

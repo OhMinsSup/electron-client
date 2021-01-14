@@ -15,7 +15,7 @@ interface MainPageProps {}
 const MainPage: React.FC<MainPageProps> = () => {
   const history = useHistory();
   const [state, onChange] = useForm<ZoomOptions>({
-    displayName: '1.8.6#Local',
+    displayName: 'React',
     password: '',
     meetingNumber: '',
     email: '',
@@ -34,7 +34,7 @@ const MainPage: React.FC<MainPageProps> = () => {
       apiSecret: `${ZOOM_SECRET_KEY}`,
       role: state.role,
       success: (res: any) => {
-        const payload: { key: any; value: any }[] = [
+        const payload: { key: any; value: any }[] = [ 
           { key: 'apiKey', value: config.ZOOM_API_KEY },
           { key: 'signature', value: res.result },
           { key: 'displayName', value: state.displayName },
@@ -62,6 +62,10 @@ const MainPage: React.FC<MainPageProps> = () => {
     });
   }, [state]);
 
+  const onZoomLogin = React.useCallback(() => {
+    window.location.href = 'http://localhost:5000/api/auth/redirect/zoom';
+  }, []);
+
   return (
     <div
       className=" bg-white font-sans h-screen absolute w-full"
@@ -69,12 +73,8 @@ const MainPage: React.FC<MainPageProps> = () => {
     >
       <div className="w-full flex flex-wrap h-screen">
         {/* Left */}
-        <div className="w-full md:w-1/2 flex flex-col">
-          <div className="flex justify-center md:justify-start pt-12 md:pl-12 md:-mb-24">
-            <h1 className="text-gray-700 font-bold text-5xl p-4">Zoom SDK</h1>
-          </div>
-
-          <div className=" mt-40 flex flex-col justify-center md:justify-start my-auto pt-8 md:pt-0 px-8 md:px-24 lg:px-32">
+        <div className="w-full m-auto flex flex-col">
+          <div className="flex flex-col justify-center m-auto md:justify-start pt-8 md:pt-0 px-8 md:px-24 lg:px-32">
             <div className="flex flex-col pt-3 md:pt-8">
               <div className="flex flex-col pt-4">
                 <label htmlFor="displayName" className="text-lg">
@@ -175,16 +175,16 @@ const MainPage: React.FC<MainPageProps> = () => {
               >
                 Join
               </button>
+
+              <button
+                type="button"
+                onClick={onZoomLogin}
+                className="bg-black text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8 no-underline"
+              >
+                Zoom 로그인
+              </button>
             </div>
           </div>
-        </div>
-
-        <div className="w-1/2 shadow-2xl bg-gray-700">
-          <img
-            className="object-cover w-full h-screen hidden md:block"
-            src="https://res.cloudinary.com/practicaldev/image/fetch/s--6UEM9XZf--/c_imagga_scale,f_auto,fl_progressive,h_900,q_auto,w_1600/https://dev-to-uploads.s3.amazonaws.com/i/s3uitx6rdv7sod1g2acz.png"
-            alt="Imag of baz fixing a bug."
-          />
         </div>
       </div>
     </div>
