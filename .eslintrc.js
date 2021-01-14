@@ -28,6 +28,7 @@ module.exports = {
     'react/jsx-filename-extension': 'off',
     'react/jsx-one-expression-per-line': 'off',
     'react/jsx-no-duplicate-props': 'off',
+    'react/prop-types': 'off',
     // console
     'no-console': 'off',
     'no-use-before-define': 'off',
