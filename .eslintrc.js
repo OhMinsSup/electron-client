@@ -36,5 +36,7 @@ module.exports = {
     'global-require': 'off',
     //jsx a11y
     'jsx-a11y/label-has-associated-control': 'off',
+    // common
+    camelcase: 'off',
   },
 };
