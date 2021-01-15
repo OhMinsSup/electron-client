@@ -3,6 +3,7 @@ import { ZoomMtg as ZoomMtgType } from '@zoomus/websdk';
 import { useHistory } from 'react-router-dom';
 import { useZoomDispatch, ZoomOptions } from '../libs/context/ZoomContext';
 import useForm from '../libs/hooks/useForm';
+import { useUserState } from '../libs/context/UserContext';
 
 declare const ZoomMtg: typeof ZoomMtgType;
 
@@ -24,7 +25,12 @@ const MainPage: React.FC<MainPageProps> = () => {
     lang: 'en-US',
   });
 
+  const user = useUserState();
   const dispatch = useZoomDispatch();
+
+  React.useCallback(() => {
+    localStorage.removeItem('@@zoom');
+  }, []);
 
   const onSubmit = React.useCallback(() => {
     const { ZOOM_API_KEY, ZOOM_SECRET_KEY } = config;
@@ -57,7 +63,7 @@ const MainPage: React.FC<MainPageProps> = () => {
         });
 
         localStorage.setItem('@@zoom', JSON.stringify(obj));
-        history.push('/metting');
+        history.push('/meetting');
       },
     });
   }, [state]);
@@ -65,6 +71,12 @@ const MainPage: React.FC<MainPageProps> = () => {
   const onZoomLogin = React.useCallback(() => {
     window.location.href = 'http://localhost:5000/api/auth/redirect/zoom';
   }, []);
+
+  const onMettingRoom = React.useCallback(() => {
+    if (user.user) {
+      history.push(`/meetting-rooms?userId=${user.user.id}`);
+    }
+  }, [user.user]);
 
   return (
     <div
@@ -176,13 +188,23 @@ const MainPage: React.FC<MainPageProps> = () => {
                 Join
               </button>
 
-              <button
-                type="button"
-                onClick={onZoomLogin}
-                className="bg-black text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8 no-underline"
-              >
-                Zoom 로그인
-              </button>
+              {user.user ? (
+                <button
+                  type="button"
+                  onClick={onMettingRoom}
+                  className="bg-black text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8 no-underline"
+                >
+                  미팅룸
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={onZoomLogin}
+                  className="bg-black text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8 no-underline"
+                >
+                  Zoom 로그인
+                </button>
+              )}
             </div>
           </div>
         </div>

@@ -5,34 +5,72 @@ const auth = Router();
 
 const { ZOOM_REDIRECT_URL, ZOOM_CLIENT_SECRET, ZOOM_CLIENT_ID } = process.env;
 
-auth.get('/refresh', async (req, res) => {
-  const { authorization } = req.headers;
-  const token = authorization.split(' ')[1];
-
-  const url = `https://zoom.us/oauth/token?grant_type=refresh_token&refresh_token=${token}`;
-  const response = await axios.post(
-    url,
-    {},
-    {
-      headers: {
-        Authorization: `Basic ${Buffer.from(
-          `${ZOOM_CLIENT_ID}:${ZOOM_CLIENT_SECRET}`,
-        ).toString('base64')}`,
-      },
-    },
-  );
-
-  const { data } = response;
-
-  res.app.locals.accesToken = data.access_token;
-  res.app.locals.refreshToken = data.refresh_token;
-
-  res.status(200).json({
+auth.post('/logout', (req, res) => {
+  req.app.locals.user = null;
+  req.app.locals.accessToken = '';
+  req.app.locals.refreshToken = '';
+  return res.status(200).json({
     ok: true,
-    accesToken: data.access_token,
-    refreshToken: data.refresh_token,
+    error: null,
   });
 });
+
+
+auth.post('/refresh', async (req, res) => {
+  if (!req.body.refreshToken) {
+    return res.status(400).json({
+      ok: false,
+      error: 'Error 61058: Refresh token is required',
+      accessToken: null,
+      refreshToken: null,
+    });
+  }
+
+  const { refreshToken } = req.body;
+
+  try {
+    const url = `https://zoom.us/oauth/token?grant_type=refresh_token&refresh_token=${refreshToken}`;
+    const response = await axios.post(
+      url,
+      {},
+      {
+        headers: {
+          Authorization: `Basic ${Buffer.from(
+            `${ZOOM_CLIENT_ID}:${ZOOM_CLIENT_SECRET}`,
+          ).toString('base64')}`,
+        },
+      },
+    );
+
+    const { data } = response;
+
+    res.app.locals.accessToken = data.access_token;
+    res.app.locals.refreshToken = data.refresh_token;
+
+    return res.status(200).json({
+      ok: true,
+      error: null,
+      accessToken: data.access_token,
+      refreshToken: data.refresh_token,
+    });
+  } catch (e) {
+    return res.status(403).json({
+      ok: true,
+      error: 'Error 57533: Refresh token is not valid',
+      accessToken: null,
+      refreshToken: null,
+    });
+  }
+});
+
+auth.get('/tokens', (req, res) =>
+  res.status(200).json({
+    ok: true,
+    error: null,
+    accessToken: res.app.locals.accessToken || null,
+    refreshToken: res.app.locals.refreshToken || null,
+  }),
+);
 
 auth.get('/callback/zoom', async (req, res) => {
   const { code } = req.query;
@@ -57,12 +95,9 @@ auth.get('/callback/zoom', async (req, res) => {
       },
     });
 
-    res.app.locals.accesToken = tokenData.data.access_token;
+    res.app.locals.accessToken = tokenData.data.access_token;
     res.app.locals.refreshToken = tokenData.data.refresh_token;
     res.app.locals.user = userData.data;
-    console.info('access_token:: => ', tokenData.data.access_token);
-    console.info('refresh_token:: => ', tokenData.data.refresh_token);
-    console.info('user_info:: => ', userData.data);
   }
 
   res.redirect('http://localhost:4000');

@@ -1,28 +1,53 @@
 import React from 'react';
 import { useQuery } from 'react-query';
+import {
+  accessTokenFn,
+  AuthAPI,
+  refreshTokenFn,
+  UserAPI,
+} from '../libs/api/client';
 import { useUserDispatch } from '../libs/context/UserContext';
 
 interface CoreProps {}
 const Core: React.FC<CoreProps> = () => {
+  const userMountRef = React.useRef(false);
+  const tokenMountRef = React.useRef(false);
+
   const dispatch = useUserDispatch();
-  const { data } = useQuery('userData', () =>
-    fetch('http://localhost:5000/api/user').then((res) => res.json()),
-  );
+  const user = useQuery('userData', () => UserAPI.user());
+  const token = useQuery('tokenData', () => AuthAPI.tokens());
 
   React.useEffect(() => {
-    if (data) {
+    if (user.data && !userMountRef.current) {
+      userMountRef.current = true;
       dispatch({
         type: 'SET_USER',
-        payload: {
-          user: data.user,
-          accessToken: data.accesToken,
-          refreshToken: data.refreshToken,
-        },
+        payload: user.data.user,
       });
     }
-  }, [data]);
 
-  console.log(data);
+    if (!user.data) {
+      userMountRef.current = false;
+    }
+  }, [user.data]);
+
+  React.useEffect(() => {
+    if (
+      token.data &&
+      token.data.accessToken &&
+      token.data.refreshToken &&
+      !tokenMountRef.current
+    ) {
+      tokenMountRef.current = true;
+      accessTokenFn(token.data.accessToken);
+      refreshTokenFn(token.data.refreshToken);
+    }
+
+    if (!token.data) {
+      tokenMountRef.current = false;
+    }
+  }, [token.data]);
+
   return null;
 };
 

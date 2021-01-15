@@ -2,8 +2,6 @@ import React from 'react';
 
 export interface UserState {
   user: any;
-  accessToken: string;
-  refreshToken: string;
 }
 
 export const UserStateContext = React.createContext<UserState | undefined>(
@@ -12,11 +10,7 @@ export const UserStateContext = React.createContext<UserState | undefined>(
 
 export type UserAction = {
   type: 'SET_USER';
-  payload: {
-    user: any;
-    accessToken: string;
-    refreshToken: string;
-  };
+  payload: any;
 };
 
 export type UserDispatch = React.Dispatch<UserAction>;
@@ -28,15 +22,11 @@ export const UserDispatchContext = React.createContext<
 export function userReducer(state: UserState, action: UserAction): UserState {
   switch (action.type) {
     case 'SET_USER': {
-      const {
-        payload: { user, accessToken, refreshToken },
-      } = action;
+      const { payload } = action;
 
       return {
         ...state,
-        user,
-        accessToken,
-        refreshToken,
+        user: payload,
       };
     }
     default:
@@ -51,8 +41,6 @@ export function UserContextProvider({
 }) {
   const [state, dispatch] = React.useReducer(userReducer, {
     user: null,
-    accessToken: '',
-    refreshToken: '',
   });
 
   return (

@@ -3,6 +3,7 @@ import { ZoomMtg as ZoomMtgType } from '@zoomus/websdk'
 import { Route, Switch } from 'react-router-dom';
 import MainPage from './pages/MainPage';
 import MeetingPage from './pages/MeetingPage';
+import MeetingsPage from './pages/MeetingsPage';
 import Core from './containers/Core';
 
 declare const ZoomMtg: typeof ZoomMtgType;
@@ -17,7 +18,8 @@ function App() {
     <>
       <Switch>
         <Route path="/" component={MainPage} exact />
-        <Route path="/metting" component={MeetingPage} />
+        <Route path="/meetting" component={MeetingPage} />
+        <Route path="/meetting-rooms" component={MeetingsPage} />
       </Switch>
       <Core />
     </>
