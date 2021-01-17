@@ -29,6 +29,7 @@ module.exports = {
     'react/jsx-one-expression-per-line': 'off',
     'react/jsx-no-duplicate-props': 'off',
     'react/prop-types': 'off',
+    'react/jsx-props-no-spreading': 'off',
     // console
     'no-console': 'off',
     'no-use-before-define': 'off',
