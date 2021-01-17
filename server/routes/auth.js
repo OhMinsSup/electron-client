@@ -6,15 +6,14 @@ const auth = Router();
 const { ZOOM_REDIRECT_URL, ZOOM_CLIENT_SECRET, ZOOM_CLIENT_ID } = process.env;
 
 auth.post('/logout', (req, res) => {
-  req.app.locals.user = null;
-  req.app.locals.accessToken = '';
-  req.app.locals.refreshToken = '';
+  req.session.destroy(() => {
+    console.log('logout:: 🌕 session clear');
+  });
   return res.status(200).json({
     ok: true,
     error: null,
   });
 });
-
 
 auth.post('/refresh', async (req, res) => {
   if (!req.body.refreshToken) {
@@ -44,8 +43,12 @@ auth.post('/refresh', async (req, res) => {
 
     const { data } = response;
 
-    res.app.locals.accessToken = data.access_token;
-    res.app.locals.refreshToken = data.refresh_token;
+    req.session.accessToken = data.access_token;
+    req.session.refreshToken = data.refresh_token;
+
+    req.session.save(() => {
+      console.log('refresh:: 🌕 session save');
+    });
 
     return res.status(200).json({
       ok: true,
@@ -63,14 +66,14 @@ auth.post('/refresh', async (req, res) => {
   }
 });
 
-auth.get('/tokens', (req, res) =>
+auth.get('/tokens', (req, res) => {
   res.status(200).json({
     ok: true,
     error: null,
-    accessToken: res.app.locals.accessToken || null,
-    refreshToken: res.app.locals.refreshToken || null,
-  }),
-);
+    accessToken: req.session.accessToken || null,
+    refreshToken: req.session.refreshToken || null,
+  });
+});
 
 auth.get('/callback/zoom', async (req, res) => {
   const { code } = req.query;
@@ -95,12 +98,15 @@ auth.get('/callback/zoom', async (req, res) => {
       },
     });
 
-    res.app.locals.accessToken = tokenData.data.access_token;
-    res.app.locals.refreshToken = tokenData.data.refresh_token;
-    res.app.locals.user = userData.data;
+    req.session.accessToken = tokenData.data.access_token;
+    req.session.refreshToken = tokenData.data.refresh_token;
+    req.session.user = userData.data;
+    req.session.save(() => {
+      console.log('callback:: 🌕 session save');
+    });
   }
 
-  res.redirect('http://localhost:4000');
+  res.redirect('http://localhost:4000/login');
 });
 
 auth.get('/redirect/zoom', (req, res) => {

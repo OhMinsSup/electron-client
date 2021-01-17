@@ -6,17 +6,18 @@ import queryString from 'query-string';
 export const accessTokenFn = (token?: string) =>
   token
     ? localStorage.setItem('@zoom::accessToken', token)
-    : localStorage.getItem('@zoom::accessToken');
+    : localStorage.getItem('@zoom::accessToken') || '';
 
 export const refreshTokenFn = (token?: string) =>
   token
     ? localStorage.setItem('@zoom::refreshToken', token)
-    : localStorage.getItem('@zoom::refreshToken');
+    : localStorage.getItem('@zoom::refreshToken') || '';
 
 const baseURL: string = 'http://localhost:5000/api';
 
 const client = axios.create({
   baseURL,
+  withCredentials: true,
 });
 
 client.interceptors.request.use(
@@ -59,6 +60,38 @@ client.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
+export interface User {
+  id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  type: number;
+  role_name: string;
+  pmi: number;
+  use_pmi: boolean;
+  personal_meeting_url: string;
+  timezone: string;
+  verified: number;
+  dept: string;
+  created_at: Date;
+  last_login_time: Date;
+  last_client_version: string;
+  host_key: string;
+  cms_user_id: string;
+  jid: string;
+  group_ids: any[];
+  im_group_ids: any[];
+  account_id: string;
+  language: string;
+  phone_country: string;
+  phone_number: string;
+  status: string;
+  job_title: string;
+  location: string;
+  login_types: number[];
+  role_id: string;
+}
+
 interface TokensResponse {
   ok: boolean;
   error: any;
@@ -69,7 +102,7 @@ interface TokensResponse {
 interface UserResponse {
   ok: boolean;
   error: any;
-  user: any;
+  user: User | null;
 }
 
 export interface MeetingModel {

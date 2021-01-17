@@ -4,29 +4,29 @@ const { Router } = require('express');
 
 const meeting = Router();
 
-meeting.get('/:userId', async (req, res) => {
-  const { authorization } = req.headers;
-  const accessToken = authorization.split(' ')[1];
-  if (!accessToken) {
-    return res.status(401).json({
-      ok: false,
-      error: 'Error 7070: Unauthorized',
-    });
-  }
+meeting.get('/:meetingId', () => {});
 
+meeting.post('/', () => {});
+
+meeting.put('/:meetingId', () => {});
+
+meeting.get('/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
     const query = queryString.stringify(req.query);
-    console.log(query, userId);
     const url = `https://api.zoom.us/v2/users/${userId}/meetings?`.concat(
       query || '',
     );
-    console.log(url);
+    console.log('userId', userId);
+    console.log('query', url);
+
     const meetings = await axios.get(url, {
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${req.session.accessToken}`,
       },
     });
+
+    console.log('response', meeting);
 
     return res.status(200).json({
       ok: true,

@@ -6,7 +6,7 @@ user.get('/', (req, res) =>
   res.status(200).json({
     oK: false,
     error: null,
-    user: res.app.locals.user || null,
+    user: req.session.user || null,
   }),
 );
 

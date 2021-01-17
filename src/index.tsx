@@ -2,26 +2,27 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
+import { RecoilRoot } from 'recoil';
+import RecoilizeDebugger from 'recoilize';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './styles/styles.css';
-
-import { ZoomContextProvider } from './libs/context/ZoomContext';
-import { UserContextProvider } from './libs/context/UserContext';
 
 const queryClient = new QueryClient();
 
 ReactDOM.render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <UserContextProvider>
-          <ZoomContextProvider>
+    <HelmetProvider>
+      <RecoilRoot>
+        {process.env.NODE_ENV === 'development' && <RecoilizeDebugger />}
+        <QueryClientProvider client={queryClient}>
+          <BrowserRouter>
             <App />
-          </ZoomContextProvider>
-        </UserContextProvider>
-      </BrowserRouter>
-    </QueryClientProvider>
+          </BrowserRouter>
+        </QueryClientProvider>
+      </RecoilRoot>
+    </HelmetProvider>
   </React.StrictMode>,
   document.getElementById('root'),
 );
