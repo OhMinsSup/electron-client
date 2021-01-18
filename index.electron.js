@@ -20,23 +20,23 @@ if (process.env.NODE_ENV === 'development') {
   require('electron-debug')();
 }
 
-const installExtensions = () => {
-  const installer = require('electron-devtools-installer');
-  const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-  const extensions = ['REACT_DEVELOPER_TOOLS'];
+// const installExtensions = () => {
+//   const installer = require('electron-devtools-installer');
+//   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
+//   const extensions = ['REACT_DEVELOPER_TOOLS'];
 
-  return installer
-    .default(
-      extensions.map((name) => installer[name]),
-      forceDownload,
-    )
-    .catch(console.log);
-};
+//   return installer
+//     .default(
+//       extensions.map((name) => installer[name]),
+//       forceDownload,
+//     )
+//     .catch(console.log);
+// };
 
 const createWindow = async () => {
-  if (process.env.NODE_ENV === 'development') {
-    await installExtensions();
-  }
+  // if (process.env.NODE_ENV === 'development') {
+  // await installExtensions();
+  // }
 
   mainWindow = new BrowserWindow({
     show: true,

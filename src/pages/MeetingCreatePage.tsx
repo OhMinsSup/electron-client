@@ -103,7 +103,7 @@ const MeetingCreatePage: React.FC<MeetingCreatePageProps> = () => {
   return (
     <>
       <Header />
-      <div className="h-screen flex items-center flex-col mt-10 lg:mt-28">
+      <div className="h-screen flex items-center flex-col mt-10">
         <div className="w-full max-w-screen-sm flex flex-col px-5 items-center">
           <h4 className="w-full font-medium text-left text-3xl mb-5">
             미팅룸 생성
