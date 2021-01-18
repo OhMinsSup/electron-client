@@ -9,7 +9,6 @@ const hydrateUser = async (req, res, next) => {
   if (!accessToken) {
     return next();
   }
-  console.log(accessToken);
 
   try {
     const response = await axios.get('https://api.zoom.us/v2/users/me', {
@@ -17,6 +16,7 @@ const hydrateUser = async (req, res, next) => {
         Authorization: `Bearer ${accessToken}`,
       },
     });
+
     req.session.user = response.data;
     req.session.save(() => {
       console.log('middleware:: 🌕 session save');

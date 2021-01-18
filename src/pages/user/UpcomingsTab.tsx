@@ -2,12 +2,12 @@ import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import UserMeetings from '../../containers/user/UserMeetings';
 
-interface MeetingsTabProps
+interface UpcomingsTabProps
   extends RouteComponentProps<{
     id: string;
   }> {}
-const MeetingsTab: React.FC<MeetingsTabProps> = ({ match }) => (
-  <UserMeetings id={match.params.id} tab="live" />
+const UpcomingsTab: React.FC<UpcomingsTabProps> = ({ match }) => (
+  <UserMeetings id={match.params.id} tab="upcoming" />
 );
 
-export default MeetingsTab;
+export default UpcomingsTab;

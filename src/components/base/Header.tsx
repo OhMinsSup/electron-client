@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
+import { AuthAPI } from '../../libs/api/client';
 import { userState } from '../../store/user';
 import { UserIcon } from '../../styles/svg';
 import Button from '../common/Button';
@@ -12,6 +13,11 @@ const Header: React.FC<HeaderProps> = () => {
 
   const onClick = React.useCallback(() => {
     history.push('/connect');
+  }, []);
+
+  const onLogout = React.useCallback(() => {
+    AuthAPI.logout();
+    window.location.href = '/';
   }, []);
 
   return (
@@ -32,25 +38,28 @@ const Header: React.FC<HeaderProps> = () => {
         <div className="flex items-center">
           <div className="flex flex-row relative space-x-5">
             {state.user && (
-              <button
-                type="button"
-                onClick={() => {
-                  history.push(`/@${state.user?.id}`);
-                }}
-                className="focus:outline-none focus:shadow-outline flex flex-wrap items-center"
-              >
-                <div className="w-8 h-8 overflow-hidden rounded-full">
-                  <UserIcon className="w-full h-full object-cover" />
-                </div>
+              <>
+                <button
+                  type="button"
+                  onClick={() => {
+                    history.push(`/@${state.user?.id}`);
+                  }}
+                  className="focus:outline-none focus:shadow-outline flex flex-wrap items-center"
+                >
+                  <div className="w-8 h-8 overflow-hidden rounded-full">
+                    <UserIcon className="w-full h-full object-cover" />
+                  </div>
 
-                <div className="ml-2 capitalize flex ">
-                  <h1 className="text-sm text-gray-800 font-semibold m-0 p-0 leading-none">
-                    <span>
-                      {state.user.first_name} {state.user.last_name}{' '}
-                    </span>
-                  </h1>
-                </div>
-              </button>
+                  <div className="ml-2 capitalize flex ">
+                    <h1 className="text-sm text-gray-800 font-semibold m-0 p-0 leading-none">
+                      <span>
+                        {state.user.first_name} {state.user.last_name}{' '}
+                      </span>
+                    </h1>
+                  </div>
+                </button>
+                <Button onClick={onLogout}>로그아웃</Button>
+              </>
             )}
 
             <Button onClick={onClick}>접속하기</Button>

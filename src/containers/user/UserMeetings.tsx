@@ -7,13 +7,27 @@ import palette from '../../libs/styles/palette';
 
 interface UserMeetingsProps {
   id: string;
+  tab?: 'live' | 'scheduled' | 'upcoming';
 }
-const UserMeetings: React.FC<UserMeetingsProps> = ({ id }) => {
-  const { data, isLoading } = useQuery<any, any, any>('myMeetingsData', () =>
-    MeetingAPI.meetingUser(id, {
-      type: 'live,scheduled,upcoming',
-    }),
+const UserMeetings: React.FC<UserMeetingsProps> = ({ id, tab }) => {
+  const { data, isLoading, error } = useQuery<any, any, any>(
+    
+    'myMeetingsData',
+  
+     () =>
+        MeetingAPI.meetingUser(id, {
+          type: tab,
+          page_size: 30,
+        }),
   );
+
+  if (error) {
+    return (
+      <div className="bg-white font-sans h-screen absolute w-full">
+        An error has occurred: {error.message}
+      </div>
+    );
+  }
 
   if (isLoading) return <>Loading....</>;
 
@@ -25,7 +39,7 @@ const UserMeetings: React.FC<UserMeetingsProps> = ({ id }) => {
         ))
       ) : (
         <EmptyBlock>
-          <div className="message">포스트가 없습니다.</div>
+          <div className="message">진행중인 미팅룸이 없습니다.</div>
         </EmptyBlock>
       )}
     </>

@@ -7,8 +7,9 @@ const { ZOOM_REDIRECT_URL, ZOOM_CLIENT_SECRET, ZOOM_CLIENT_ID } = process.env;
 
 auth.post('/logout', (req, res) => {
   req.session.destroy(() => {
-    console.log('logout:: 🌕 session clear');
+    console.log('logout:: 🌕 session destory');
   });
+
   return res.status(200).json({
     ok: true,
     error: null,
@@ -102,7 +103,7 @@ auth.get('/callback/zoom', async (req, res) => {
     req.session.refreshToken = tokenData.data.refresh_token;
     req.session.user = userData.data;
     req.session.save(() => {
-      console.log('callback:: 🌕 session save');
+      console.log('callback/login:: 🌕 session save');
     });
   }
 
@@ -110,6 +111,9 @@ auth.get('/callback/zoom', async (req, res) => {
 });
 
 auth.get('/redirect/zoom', (req, res) => {
+  req.session.destroy(() => {
+    console.log('redirect/zoom destory:: 🌖 session destory');
+  });
   res.redirect(
     `https://zoom.us/oauth/authorize?response_type=code&client_id=${ZOOM_CLIENT_ID}&redirect_uri=${ZOOM_REDIRECT_URL}`,
   );

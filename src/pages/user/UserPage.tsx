@@ -3,25 +3,26 @@ import { Route, RouteComponentProps } from 'react-router-dom';
 import UserProfile from '../../components/user/UserProfile';
 import UserTab from '../../components/user/UserTab';
 import MeetingsTab from './MeetingsTab';
+import SchdulesTab from './SchdulesTab';
+import UpcomingsTab from './UpcomingsTab';
 
 interface UserPageProps
   extends RouteComponentProps<{
     id: string;
-    tab?: 'meetings' | 'meeting' | 'my';
+    tab?: 'live' | 'scheduled' | 'upcoming';
   }> {}
 const UserPage: React.FC<UserPageProps> = ({ match }) => {
   const { id, tab } = match.params;
-  console.log(id, tab);
   return (
     <div className="ml-auto mr-auto max-w-3xl">
       <UserProfile id={id} />
-      <UserTab id={id} tab={tab || 'meetings'} />
+      <UserTab id={id} tab={tab || 'live'} />
       <Route path="/@:id" exact component={MeetingsTab} />
-      <Route path="/@:id/my" exact component={() => <>생성</>} />
-      <Route path="/@:id/meetings" exact component={MeetingsTab} />
-      <Route path="/@:id/meeting" exact component={() => <>리스트</>} />
+      <Route path="/@:id/live" exact component={MeetingsTab} />
+      <Route path="/@:id/scheduled" exact component={SchdulesTab} />
+      <Route path="/@:id/upcoming" exact component={UpcomingsTab} />
     </div>
   );
-};
+}
 
 export default UserPage;

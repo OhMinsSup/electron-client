@@ -7,8 +7,8 @@ import { Link, useHistory } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ZoomMtg as ZoomMtgType } from '@zoomus/websdk';
 import FormErrorMessage from '../components/common/FormErrorMessage';
-import HeaderContainer from '../containers/base/HeaderContainer';
 import { userState } from '../store/user';
+import Header from '../components/base/Header';
 
 declare const ZoomMtg: typeof ZoomMtgType;
 
@@ -100,7 +100,7 @@ const ConnectPage: React.FC<ConnectPageProps> = () => {
         });
 
         localStorage.setItem('@@zoom', JSON.stringify(obj));
-        history.push('/meetting');
+        history.push('/meeting');
       },
     });
   };
@@ -112,7 +112,7 @@ const ConnectPage: React.FC<ConnectPageProps> = () => {
 
   return (
     <>
-      <HeaderContainer />
+      <Header />
       <div className="h-screen flex items-center flex-col mt-10 lg:mt-28">
         <Helmet>
           <title>Connect Page | Zoom SDK</title>

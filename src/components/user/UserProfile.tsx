@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import palette from '../../libs/styles/palette';
 import { userState } from '../../store/user';
 import defaultImage from '../../styles/svg/user.svg';
+import Button from '../common/Button';
 
 interface UserProfileProps {
   id: string;
@@ -12,6 +13,10 @@ interface UserProfileProps {
 const UserProfile: React.FC<UserProfileProps> = () => {
   const user = useRecoilValue(userState);
   const history = useHistory();
+
+  const onClick = React.useCallback(() => {
+    history.push('/create');
+  }, []);
 
   React.useEffect(() => {
     if (!user.user) {
@@ -36,7 +41,9 @@ const UserProfile: React.FC<UserProfileProps> = () => {
             </strong>
           </div>
           <div className="text-lg whitespace-pre-wrap">
-            {user.user.personal_meeting_url}
+            <Button size="medium" onClick={onClick}>
+              미팅룸 생성
+            </Button>
           </div>
         </div>
       </section>

@@ -2,6 +2,14 @@ import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import isEmpty from 'lodash/isEmpty';
 import queryString from 'query-string';
+import type { ListMeetingResponse } from './model/list-meeting';
+import type { WriteMeetingResponse } from './model/write-meeting';
+import type { TokensResponse, UserResponse } from './model/user';
+
+export const userFn = (user?: any) =>
+  user
+    ? localStorage.setItem('@zoom::user', JSON.stringify(user))
+    : JSON.parse(localStorage.getItem('@zoom::user')!) || null;
 
 export const accessTokenFn = (token?: string) =>
   token
@@ -24,10 +32,13 @@ client.interceptors.request.use(
   async (config) => {
     // 요청을 보내기 전에 수행할 일
     // authorization이 헤더 안에 있는지 확인
+    console.log('header prev');
     if (!('authorization' in config.headers)) {
+      console.log('header inner');
       // 없으면 바로 요청
       return config;
     }
+    console.log('header next');
 
     // 있으면 해당 accessToken의 만료일을 체크
     const { authorization } = config.headers;
@@ -60,85 +71,33 @@ client.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
-export interface User {
-  id: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  type: number;
-  role_name: string;
-  pmi: number;
-  use_pmi: boolean;
-  personal_meeting_url: string;
-  timezone: string;
-  verified: number;
-  dept: string;
-  created_at: Date;
-  last_login_time: Date;
-  last_client_version: string;
-  host_key: string;
-  cms_user_id: string;
-  jid: string;
-  group_ids: any[];
-  im_group_ids: any[];
-  account_id: string;
-  language: string;
-  phone_country: string;
-  phone_number: string;
-  status: string;
-  job_title: string;
-  location: string;
-  login_types: number[];
-  role_id: string;
-}
-
-interface TokensResponse {
-  ok: boolean;
-  error: any;
-  accessToken?: string;
-  refreshToken?: string;
-}
-
-interface UserResponse {
-  ok: boolean;
-  error: any;
-  user: User | null;
-}
-
-export interface MeetingModel {
-  created_at: Date;
-  duration: number;
-  host_id: string;
-  id: number;
-  join_url: string;
-  start_time: Date;
-  timezone: string;
-  topic: string;
-  type: number;
-  uuid: string;
-}
-
-interface MeetingResponse {
-  ok: boolean;
-  error: any;
-  page_count?: number;
-  page_number?: number;
-  page_size?: number;
-  next_page_token?: string;
-  meetings?: MeetingModel[];
-}
-
 export const AuthAPI = {
   tokens: () =>
     client
       .get<TokensResponse>('/auth/tokens')
       .then((res) => ({ ...res.data, status: res.status })),
+  logout: () =>
+    client
+      .post(
+        '/auth/logout',
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${accessTokenFn()}`,
+          },
+        },
+      )
+      .then(() => {
+        localStorage.removeItem('@zoom::accessToken');
+        localStorage.removeItem('@zoom::refreshToken');
+        localStorage.removeItem('@zoom::user');
+      }),
 };
 
 export const UserAPI = {
   user: () =>
     client
-      .get<UserResponse>('/user', {
+      .get<UserResponse>('/user/', {
         headers: {
           Authorization: `Bearer ${accessTokenFn()}`,
         },
@@ -147,9 +106,15 @@ export const UserAPI = {
 };
 
 export const MeetingAPI = {
+  createMeeting: (userId: string, body: any) =>
+    client.post<WriteMeetingResponse>(`/meeting/${userId}`, body, {
+      headers: {
+        Authorization: `Bearer ${accessTokenFn()}`,
+      },
+    }),
   meetingUser: (userId: string, params?: any) =>
     client
-      .get<MeetingResponse>(
+      .get<ListMeetingResponse>(
         `/meeting/${userId}?`.concat(
           isEmpty(params) ? '' : queryString.stringify(params),
         ),

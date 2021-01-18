@@ -8,6 +8,7 @@ export default function useZoomDisplayNone() {
     const zoomEl = document.getElementById('zmmtg-root');
 
     if (zoomEl) {
+      console.log(location.pathname);
       if (!['/meeting'].includes(location.pathname)) {
         zoomEl.classList.add('hidden');
       } else {

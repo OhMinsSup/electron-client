@@ -33,8 +33,8 @@ app.use(cookieParser());
 
 app.use(
   session({
-    secret: 'zoom-server', // 암호화하는 데 쓰일 키
-    resave: true, // 세션을 언제나 저장할지 설정함
+    secret: process.env.SESSION_SECRET, // 암호화하는 데 쓰일 키
+    resave: false, // 세션을 언제나 저장할지 설정함
     saveUninitialized: true, // 세션이 저장되기 전 uninitialized 상태로 미리 만들어 저장
     cookie: {
       maxAge: 31536000,

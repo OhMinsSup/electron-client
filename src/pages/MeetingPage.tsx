@@ -56,7 +56,7 @@ const MeetingPage: React.FC<MeetingPageProps> = () => {
     }
   }, []);
 
-  return <div>MeetingPage</div>;
+  return null;
 };
 
 export default MeetingPage;

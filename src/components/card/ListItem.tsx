@@ -1,26 +1,30 @@
 import React from 'react';
-import type { MeetingModel } from '../../libs/api/client';
+import { ListMeetingModel } from '../../libs/api/model/list-meeting';
+// import { ZoomMtg as ZoomMtgType } from '@zoomus/websdk';
+import Button from '../common/Button';
+
+// declare const ZoomMtg: typeof ZoomMtgType;
 
 interface ListItemProps {
-  meeting: MeetingModel;
+  meeting: ListMeetingModel;
 }
 const ListItem: React.FC<ListItemProps> = ({ meeting }) => {
   console.log(meeting);
   return (
     <div className="card col-span-1">
       <div className="card-body">
-        <h5 className="uppercase text-xs tracking-wider font-extrabold">
-          today
-        </h5>
-        <h1 className="capitalize text-lg mt-1 mb-1">
-          $<span className="num-3">1083</span>{' '}
-          <span className="text-xs tracking-widest font-extrabold">
-            {' '}
-            / <span className="num-2">40</span> orders
-          </span>
-        </h1>
+        <div className="flex justify-between items-center">
+          <h5 className="uppercase text-xs tracking-wider font-extrabold">
+            {meeting.topic}
+          </h5>
+          <div className="space-x-2">
+            <Button>참여하기</Button>
+            <Button>접속하기</Button>
+          </div>
+        </div>
+
         <p className="capitalize text-xs text-gray-500">
-          ( $<span className="num-2">23</span> in the last year )
+          <span className="num-2">{meeting.timezone}</span>
         </p>
       </div>
     </div>

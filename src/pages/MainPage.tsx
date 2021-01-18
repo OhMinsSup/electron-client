@@ -1,5 +1,5 @@
 import React from 'react';
-import HeaderContainer from '../containers/base/HeaderContainer';
+import Header from '../components/base/Header';
 
 interface MainPageProps {}
 const MainPage: React.FC<MainPageProps> = () => {
@@ -9,7 +9,7 @@ const MainPage: React.FC<MainPageProps> = () => {
 
   return (
     <>
-      <HeaderContainer />
+      <Header />
       <div className="h-screen flex flex-row flex-wrap bg-gray-100">
         <div className="flex-1">
           <div className="h-screen flex items-center justify-center">

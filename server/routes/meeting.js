@@ -4,12 +4,6 @@ const { Router } = require('express');
 
 const meeting = Router();
 
-meeting.get('/:meetingId', () => {});
-
-meeting.post('/', () => {});
-
-meeting.put('/:meetingId', () => {});
-
 meeting.get('/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
@@ -17,23 +11,48 @@ meeting.get('/:userId', async (req, res) => {
     const url = `https://api.zoom.us/v2/users/${userId}/meetings?`.concat(
       query || '',
     );
-    console.log('userId', userId);
-    console.log('query', url);
 
-    const meetings = await axios.get(url, {
+    const response = await axios.get(url, {
       headers: {
         Authorization: `Bearer ${req.session.accessToken}`,
       },
     });
 
-    console.log('response', meeting);
+    return res.status(200).json({
+      ok: true,
+      error: null,
+      meeting: response.data,
+    });
+  } catch (e) {
+    console.error(e);
+    return res.status(400).json({
+      ok: false,
+      error: 'Error: 4000: Data is NotFound',
+    });
+  }
+});
+
+meeting.post('/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const response = await axios.post(
+      `https://api.zoom.us/v2/users/${userId}/meetings`,
+      req.body,
+      {
+        headers: {
+          Authorization: `Bearer ${req.session.accessToken}`,
+        },
+      },
+    );
 
     return res.status(200).json({
       ok: true,
       error: null,
-      ...meetings.data,
+      ...response.data,
     });
   } catch (e) {
+    console.error(e);
     return res.status(400).json({
       ok: false,
       error: 'Error: 4000: Data is NotFound',

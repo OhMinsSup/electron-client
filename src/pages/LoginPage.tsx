@@ -8,6 +8,7 @@ import {
   AuthAPI,
   refreshTokenFn,
   UserAPI,
+  userFn,
 } from '../libs/api/client';
 import palette from '../libs/styles/palette';
 import { userState } from '../store/user';
@@ -22,6 +23,7 @@ const LoginPage: React.FC<LoginPageProps> = () => {
   React.useEffect(() => {
     if (user.data) {
       setUser((oldUser) => ({ ...oldUser, user: user.data.user }));
+      userFn(user.data.user);
     }
 
     if (token.data && token.data.accessToken && token.data.refreshToken) {

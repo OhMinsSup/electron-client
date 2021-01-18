@@ -2,12 +2,10 @@ import React from 'react';
 import { parse } from 'query-string';
 import { useQuery } from 'react-query';
 import { useHistory, useLocation } from 'react-router-dom';
-// import List from '../components/List';
-// import ListItem from '../components/card/ListItem';
 import { useUserState } from '../libs/context/UserContext';
 import { MeetingAPI } from '../libs/api/client';
-import HeaderContainer from '../containers/base/HeaderContainer';
 import ListItem from '../components/card/ListItem';
+import Header from '../components/base/Header';
 
 interface MettingsPageProps {}
 const MeetingsPage: React.FC<MettingsPageProps> = () => {
@@ -22,6 +20,7 @@ const MeetingsPage: React.FC<MettingsPageProps> = () => {
     () =>
       MeetingAPI.meetingUser(userId as string, {
         type: 'live,scheduled,upcoming',
+        page_size: 30,
       }),
   );
 
@@ -49,7 +48,7 @@ const MeetingsPage: React.FC<MettingsPageProps> = () => {
 
   return (
     <>
-      <HeaderContainer />
+      <Header />
       <div className="h-screen flex flex-row flex-wrap bg-gray-100">
         <div className="flex-1 p-6 md:mt-16">
           <div className="grid grid-cols-5 gap-5 mt-5 lg:grid-cols-5">

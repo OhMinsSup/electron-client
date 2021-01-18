@@ -1,3 +1,5 @@
+export const DATE_FORMAT = 'yyyy-MM-ddTHH:mm:ss.SSSZ';
+
 export const setCookie = (cname: string, cvalue: string) => {
   const exdays = 1;
   const d = new Date();
