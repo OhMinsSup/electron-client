@@ -47,6 +47,7 @@
   "scripts": {
     "start:server": "cross-env NODE_ENV=development nodemon index.server.js",
     "start:main": "cross-env NODE_ENV=development ELECTRON_START_URL=http://localhost:4000 electron -r ./scripts/babel-register.js  .",
+    "start:web": "env-cmd -f .env.development react-scripts start",
     "tailwind:build": "tailwind build ./src/styles/tailwind.css -o ./src/styles/styles.css",
     "start": "dotenv -e .env.development react-scripts start",
     "build": "react-scripts build",

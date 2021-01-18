@@ -13,8 +13,8 @@ import Header from '../components/base/Header';
 declare const ZoomMtg: typeof ZoomMtgType;
 
 const config = {
-  ZOOM_API_KEY: '',
-  ZOOM_SECRET_KEY: '',
+  ZOOM_API_KEY: process.env.REACT_APP_ZOOM_API_KEY,
+  ZOOM_SECRET_KEY: process.env.REACT_APP_ZOOM_SECRET_KET,
 };
 
 const schema = yup.object().shape({
