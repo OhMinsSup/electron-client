@@ -17,6 +17,9 @@ const Header: React.FC<HeaderProps> = () => {
 
   const onLogout = React.useCallback(() => {
     AuthAPI.logout();
+    localStorage.removeItem('@zoom::accessToken');
+    localStorage.removeItem('@zoom::refreshToken');
+    localStorage.removeItem('@zoom::user');
     window.location.href = '/';
   }, []);
 

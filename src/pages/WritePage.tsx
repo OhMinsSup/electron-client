@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from 'react-query';
 import { useRecoilValue } from 'recoil';
+import { useHistory } from 'react-router-dom';
 import swal from 'sweetalert';
 import Header from '../components/base/Header';
 import FormErrorMessage from '../components/common/FormErrorMessage';
@@ -39,6 +40,7 @@ interface FormFieldValue {
 
 interface WritePageProps {}
 const WritePage: React.FC<WritePageProps> = () => {
+  const history = useHistory();
   const state = useRecoilValue(userState);
 
   const mutation = useMutation<any, any, any>((data) =>
@@ -94,7 +96,7 @@ const WritePage: React.FC<WritePageProps> = () => {
         title: '미팅룸',
         text: '미팅룸 생성 완료!',
         icon: 'success',
-      });
+      }).then(() => history.push(`/info/@:${mutation.data.id}`));
     }
   }, [mutation.isSuccess]);
 

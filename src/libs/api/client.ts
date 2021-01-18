@@ -76,22 +76,7 @@ export const AuthAPI = {
     client
       .get<TokensResponse>('/auth/tokens')
       .then((res) => ({ ...res.data, status: res.status })),
-  logout: () =>
-    client
-      .post(
-        '/auth/logout',
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${accessTokenFn()}`,
-          },
-        },
-      )
-      .then(() => {
-        localStorage.removeItem('@zoom::accessToken');
-        localStorage.removeItem('@zoom::refreshToken');
-        localStorage.removeItem('@zoom::user');
-      }),
+  logout: () => client.post('/auth/logout', {}),
 };
 
 export const UserAPI = {
@@ -108,6 +93,12 @@ export const UserAPI = {
 export const MeetingAPI = {
   createMeeting: (userId: string, body: any) =>
     client.post<WriteMeetingResponse>(`/meeting/${userId}`, body, {
+      headers: {
+        Authorization: `Bearer ${accessTokenFn()}`,
+      },
+    }),
+  detailMeeting: (meetingId: string) =>
+    client.get<WriteMeetingResponse>(`/meeting/info/${meetingId}`, {
       headers: {
         Authorization: `Bearer ${accessTokenFn()}`,
       },
