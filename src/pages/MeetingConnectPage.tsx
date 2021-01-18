@@ -11,8 +11,8 @@ const b64EncodeUnicode = (str: string) =>
     ),
   );
 
-interface MeetingPageProps {}
-const MeetingPage: React.FC<MeetingPageProps> = () => {
+interface MeetingConnectPageProps {}
+const MeetingConnectPage: React.FC<MeetingConnectPageProps> = () => {
   const history = useHistory();
 
   React.useEffect(() => {
@@ -59,4 +59,4 @@ const MeetingPage: React.FC<MeetingPageProps> = () => {
   return null;
 };
 
-export default MeetingPage;
+export default MeetingConnectPage;

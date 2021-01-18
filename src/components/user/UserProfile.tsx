@@ -15,7 +15,7 @@ const UserProfile: React.FC<UserProfileProps> = () => {
   const history = useHistory();
 
   const onClick = React.useCallback(() => {
-    history.push('/create');
+    history.push('/meeting/create');
   }, []);
 
   React.useEffect(() => {

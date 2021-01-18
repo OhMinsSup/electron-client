@@ -9,7 +9,7 @@ export default function useZoomDisplayNone() {
 
     if (zoomEl) {
       console.log(location.pathname);
-      if (!['/meeting'].includes(location.pathname)) {
+      if (!['/meeting-connect'].includes(location.pathname)) {
         zoomEl.classList.add('hidden');
       } else {
         zoomEl.classList.remove('hidden');

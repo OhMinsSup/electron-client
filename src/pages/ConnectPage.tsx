@@ -100,7 +100,7 @@ const ConnectPage: React.FC<ConnectPageProps> = () => {
         });
 
         localStorage.setItem('@@zoom', JSON.stringify(obj));
-        history.push('/meeting');
+        history.push('/meeting-connect');
       },
     });
   };

@@ -38,8 +38,8 @@ interface FormFieldValue {
   duration?: number;
 }
 
-interface WritePageProps {}
-const WritePage: React.FC<WritePageProps> = () => {
+interface MeetingCreatePageProps {}
+const MeetingCreatePage: React.FC<MeetingCreatePageProps> = () => {
   const history = useHistory();
   const state = useRecoilValue(userState);
 
@@ -96,7 +96,7 @@ const WritePage: React.FC<WritePageProps> = () => {
         title: '미팅룸',
         text: '미팅룸 생성 완료!',
         icon: 'success',
-      }).then(() => history.push(`/info/@:${mutation.data.id}`));
+      }).then(() => history.push(`/meeting/@:${mutation.data.id}`));
     }
   }, [mutation.isSuccess]);
 
@@ -199,4 +199,4 @@ const WritePage: React.FC<WritePageProps> = () => {
   );
 };
 
-export default WritePage;
+export default MeetingCreatePage;
