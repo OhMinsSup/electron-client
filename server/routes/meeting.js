@@ -60,6 +60,33 @@ meeting.post('/:userId', async (req, res) => {
   }
 });
 
+meeting.delete('/info/:meeting', async (req, res) => {
+  try {
+    const { meetingId } = req.params;
+    const query = queryString.stringify(req.query);
+    const url = `https://api.zoom.us/v2/meetings/${meetingId}?`.concat(
+      query || '',
+    );
+
+    await axios.delete(url, {
+      headers: {
+        Authorization: `Bearer ${req.session.accessToken}`,
+      },
+    });
+
+    return res.status(200).json({
+      ok: true,
+      error: null,
+    });
+  } catch (e) {
+    console.error(e);
+    return res.status(400).json({
+      ok: false,
+      error: 'Error: 4000: Data is NotFound',
+    });
+  }
+});
+
 meeting.get('/info/:meetingId', async (req, res) => {
   try {
     const { meetingId } = req.params;

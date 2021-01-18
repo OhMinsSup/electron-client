@@ -68,43 +68,38 @@ const MeetingInfoPage: React.FC<MeetingInfoPageProps> = () => {
               </h2>
               <dl className="transition-opacity duration-1500 delay-500 flex flex-wrap divide-y divide-gray-200 border-b border-gray-200 opacity-25">
                 <div className="px-4 pb-6">
-                  <dt className="sr-only">Date and time</dt>
                   <dd className="text-sm sm:text-base">
-                    <time dateTime="2020-11-15T10:00:00-05:00">
-                      Thu Nov 15, 2020 10:00am
-                    </time>{' '}
-                    <time dateTime="2020-11-15T11:00:00-05:00">
-                      11:00am
-                      <span className="sr-only sm:not-sr-only"> EST</span>
+                    <time dateTime={data.created_at}>
+                      {data.created_at}
+                      <span className="sr-only sm:not-sr-only">
+                        {' '}
+                        {data.timezone}
+                      </span>
                     </time>
                   </dd>
                 </div>
 
                 <div className="w-full flex-none flex items-baseline px-4 py-4">
-                  <dt className="w-2/5 flex-none uppercase text-xs font-semibold tracking-wide">
-                    Location
+                  <dt className="w-1/5 flex-none uppercase text-xs font-semibold tracking-wide">
+                    아이디
+                  </dt>
+                  <dd className="text-black text-sm">{data.id}</dd>
+                </div>
+
+                <div className="w-full flex-none flex items-baseline px-4 py-4">
+                  <dt className="w-1/5 flex-none uppercase text-xs font-semibold tracking-wide text-gray-800">
+                    패스워드
                   </dt>
                   <dd className="text-black text-sm">
-                    Kitchener, <abbr title="Ontario">ON</abbr>
+                    {data.encrypted_password}
                   </dd>
                 </div>
 
                 <div className="w-full flex-none flex items-baseline px-4 py-4">
-                  <dt className="w-2/5 flex-none uppercase text-xs font-semibold tracking-wide text-gray-800">
-                    Location
+                  <dt className="w-1/5 flex-none uppercase text-xs font-semibold tracking-wide">
+                    URL
                   </dt>
-                  <dd className="text-black text-sm">
-                    Kitchener, <abbr title="Ontario">ON</abbr>
-                  </dd>
-                </div>
-
-                <div className="w-full flex-none flex items-baseline px-4 py-4">
-                  <dt className="w-2/5 flex-none uppercase text-xs font-semibold tracking-wide">
-                    Location
-                  </dt>
-                  <dd className="text-black text-sm">
-                    Kitchener, <abbr title="Ontario">ON</abbr>
-                  </dd>
+                  <dd className="text-black text-sm">{data.join_url}</dd>
                 </div>
               </dl>
               <div className="grid grid-cols-2 gap-x-4 px-4 py-4">

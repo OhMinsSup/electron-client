@@ -5,9 +5,12 @@ import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { RecoilRoot } from 'recoil';
 import RecoilizeDebugger from 'recoilize';
+
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+
 import './styles/styles.css';
+import './styles/global.css';
 
 const queryClient = new QueryClient();
 

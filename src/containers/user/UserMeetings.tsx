@@ -11,14 +11,12 @@ interface UserMeetingsProps {
 }
 const UserMeetings: React.FC<UserMeetingsProps> = ({ id, tab }) => {
   const { data, isLoading, error } = useQuery<any, any, any>(
-    
     'myMeetingsData',
-  
-     () =>
-        MeetingAPI.meetingUser(id, {
-          type: tab,
-          page_size: 30,
-        }),
+    () =>
+      MeetingAPI.meetingUser(id, {
+        type: tab,
+        page_size: 30,
+      }),
   );
 
   if (error) {

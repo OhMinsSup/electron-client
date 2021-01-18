@@ -10,6 +10,7 @@ import UserInfoPage from './pages/UserInfoPage';
 import Core from './containers/base/Core';
 import MeetingCreatePage from './pages/MeetingCreatePage';
 import MeetingInfoPage from './pages/MeetingInfoPage';
+import useBody from './libs/hooks/useBody';
 
 declare const ZoomMtg: typeof ZoomMtgType;
 
@@ -19,6 +20,7 @@ ZoomMtg.prepareJssdk();
 
 function App() {
   useZoomDisplayNone();
+  useBody();
   return (
     <>
       <Switch>
