@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import Header from '../components/base/Header';
+import Header from '../components/common/Header';
 import UserPage from './user/UserPage';
 
 interface UserInfoPageProps {}

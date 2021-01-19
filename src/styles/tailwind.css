@@ -1,19 +1,9 @@
 
 @tailwind base;
 @tailwind components;
+
+.input {
+    @apply focus:outline-none font-sans focus:border-gray-500 p-3 border-2  text-lg border-gray-200 transition-colors
+}
+
 @tailwind utilities;
-
-.card {
-    border-radius: 0.25rem;
-    --bg-opacity: 1;
-    background-color: #fff;
-    background-color: rgba(255, 255, 255, var(--bg-opacity));
-    border-width: 1px;
-    --border-opacity: 1;
-    border-color: #e2e8f0;
-    border-color: rgba(226, 232, 240, var(--border-opacity));
-}
-
-.card .card-body {
-    padding: 1.5rem;
-}

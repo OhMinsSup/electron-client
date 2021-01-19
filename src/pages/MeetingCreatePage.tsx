@@ -7,7 +7,7 @@ import { useRecoilValue } from 'recoil';
 import { useHistory } from 'react-router-dom';
 import swal from 'sweetalert';
 import { Helmet } from 'react-helmet-async';
-import Header from '../components/base/Header';
+import Header from '../components/common/Header';
 import FormErrorMessage from '../components/common/FormErrorMessage';
 import { MeetingAPI } from '../libs/api/client';
 import { userState } from '../store/user';

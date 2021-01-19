@@ -8,6 +8,10 @@ module.exports = {
       colors: {
         teal: colors.teal,
       },
+      width: {
+        '1024': '1024px',
+        '768': '768px',
+      },
     },
   },
   variants: {

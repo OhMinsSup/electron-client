@@ -6,7 +6,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
-import Header from '../components/base/Header';
+// import Header from '../components/base/Header';
+import Header from '../components/common/Header';
 import FormErrorMessage from '../components/common/FormErrorMessage';
 
 import { userState } from '../store/user';
@@ -111,19 +112,17 @@ const MainPage: React.FC<MainPageProps> = () => {
         <meta name="robots" content="noindex" />
       </Helmet>
       <Header />
-      <div className="container lg:w-5/12 md:w-1/2 xl:w-1/4 mx-auto my-10 flex flex-col items-center">
-        <div className="mt-5">
+
+      <div className="sm:w-768 mx-auto w-full">
+        <div className="lg:mt-14 md:mt-8 md:px-4 mt-5">
           <h4 className="font-medium text-3xl mb-5">Connecting Zoom SDK</h4>
-          <form
-            className="w-full my-5 space-y-4"
-            onSubmit={handleSubmit(onSubmit)}
-          >
+          <form onSubmit={handleSubmit(onSubmit)}>
             <input
               ref={register}
               name="displayName"
               type="text"
               placeholder="유저명"
-              className="w-full focus:outline-none font-sans focus:border-gray-500 p-3 border-2  text-lg border-gray-200 transition-colors"
+              className="input"
             />
             {Boolean(errors.displayName) && (
               <FormErrorMessage msg={errors.displayName?.message} />
@@ -133,7 +132,7 @@ const MainPage: React.FC<MainPageProps> = () => {
               name="meetingNumber"
               type="text"
               placeholder="미팅번호"
-              className="w-full focus:outline-none font-sans focus:border-gray-500 p-3 border-2  text-lg border-gray-200 transition-colors"
+              className="input"
             />
             {Boolean(errors.meetingNumber) && (
               <FormErrorMessage msg={errors.meetingNumber?.message} />
@@ -143,7 +142,7 @@ const MainPage: React.FC<MainPageProps> = () => {
               name="meetingPassword"
               type="password"
               placeholder="미팅 비밀번호"
-              className="w-full focus:outline-none font-sans focus:border-gray-500 p-3 border-2  text-lg border-gray-200 transition-colors"
+              className="input"
             />
             {Boolean(errors.meetingPassword) && (
               <FormErrorMessage msg={errors.meetingPassword?.message} />
@@ -153,23 +152,15 @@ const MainPage: React.FC<MainPageProps> = () => {
               name="email"
               type="email"
               placeholder="이메일"
-              className="w-full focus:outline-none font-sans focus:border-gray-500 p-3 border-2  text-lg border-gray-200 transition-colors"
+              className="input"
             />
-            <select
-              ref={register}
-              name="role"
-              className="w-full focus:outline-none font-sans focus:border-gray-500 p-3 border-2  text-lg border-gray-200 transition-colors"
-            >
+            <select ref={register} name="role" className="input">
               <option value={0}>참석자</option>
               <option value={1}>주최자</option>
               <option value={5}>도우미</option>
             </select>
 
-            <select
-              ref={register}
-              name="lang"
-              className="w-full focus:outline-none font-sans focus:border-gray-500 p-3 border-2  text-lg border-gray-200 transition-colors"
-            >
+            <select ref={register} name="lang" className="input">
               <option value="en-US">영어</option>
               <option value="ko-KO">한국어</option>
             </select>

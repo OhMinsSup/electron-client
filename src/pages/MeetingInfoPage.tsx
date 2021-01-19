@@ -3,7 +3,7 @@ import { useQuery } from 'react-query';
 import { useHistory, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import swal from 'sweetalert';
-import Header from '../components/base/Header';
+import Header from '../components/common/Header';
 import Button from '../components/common/Button';
 import { MeetingAPI } from '../libs/api/client';
 import { config, ZoomType } from '../libs/utils';
