@@ -109,90 +109,142 @@ const MeetingCreatePage: React.FC<MeetingCreatePageProps> = () => {
         <title>Meeting Create Page | Zoom SDK</title>
       </Helmet>
       <Header />
-      <div className="container lg:w-5/12 md:w-1/2 xl:w-1/4 mx-auto my-10 flex flex-col items-center">
-        <div className="mt-5r">
-          <h4 className="w-full font-medium text-left text-3xl mb-5">
-            미팅룸 생성
-          </h4>
-          <form
-            className="my-5 w-full space-y-4"
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            <input
-              ref={register}
-              name="topic"
-              type="text"
-              placeholder="토픽"
-              className="w-full ocus:outline-none focus:border-gray-500 p-3 border-2  text-lg border-gray-200 transition-colors"
-            />
-            {Boolean(errors.topic) && (
-              <FormErrorMessage msg={errors.topic?.message} />
-            )}
-            <input
-              ref={register}
-              name="password"
-              type="password"
-              placeholder="비밀번호"
-              className="w-full focus:outline-none focus:border-gray-500 p-3 border-2  text-lg border-gray-200 transition-colors"
-            />
-            {Boolean(errors.password) && (
-              <FormErrorMessage msg={errors.password?.message} />
-            )}
-            <input
-              ref={register}
-              name="start_time"
-              type="datetime-local"
-              placeholder="회의 시작시간"
-              className="w-full focus:outline-none focus:border-gray-500 p-3 border-2  text-lg border-gray-200 transition-colors"
-            />
-            {Boolean(errors.start_time) && (
-              <FormErrorMessage msg={errors.start_time?.message} />
-            )}
-            <input
-              ref={register}
-              name="timezone"
-              type="text"
-              disabled
-              placeholder="Timezone"
-              className="w-full focus:outline-none focus:border-gray-500 p-3 border-2  text-lg border-gray-200 transition-colors"
-            />
-            {Boolean(errors.timezone) && (
-              <FormErrorMessage msg={errors.timezone?.message} />
-            )}
-            <select
-              ref={register}
-              name="type"
-              className="w-full focus:outline-none focus:border-gray-500 p-3 border-2  text-lg border-gray-200 transition-colors"
-            >
-              <option value={1}>즉석 회의</option>
-              <option value={2}>예약 회의</option>
-            </select>
-            {Number(watch('type')) === 2 && (
-              <>
+      <div className="min-h-screen w-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md w-full space-y-8">
+          <div>
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+              미팅룸 생성
+            </h2>
+          </div>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="relative">
+              <fieldset>
+                <label className="block text-gray-800 mt-3 mb-1 font-sans font-bold">
+                  토픽
+                </label>
                 <input
                   ref={register}
-                  name="duration"
+                  name="topic"
                   type="text"
-                  placeholder="회의시간"
+                  placeholder="토픽"
+                  className="input w-full mr-2"
+                />
+                {Boolean(errors.topic) && (
+                  <FormErrorMessage msg={errors.topic?.message} />
+                )}
+              </fieldset>
+            </div>
+
+            <div className="relative">
+              <fieldset>
+                <label className="block text-gray-800 mt-3 mb-1 font-sans font-bold">
+                  미팅 비밀번호
+                </label>
+                <input
+                  ref={register}
+                  name="password"
+                  type="password"
+                  placeholder="비밀번호"
                   className="w-full focus:outline-none focus:border-gray-500 p-3 border-2  text-lg border-gray-200 transition-colors"
                 />
-                {Boolean(errors.duration) && (
-                  <FormErrorMessage msg={errors.duration?.message} />
+                {Boolean(errors.password) && (
+                  <FormErrorMessage msg={errors.password?.message} />
                 )}
-              </>
-            )}
-            <input
-              ref={register}
-              name="agenda"
-              type="text"
-              placeholder="설명"
-              className="w-full focus:outline-none focus:border-gray-500 p-3 border-2  text-lg border-gray-200 transition-colors;"
-            />
-            {Boolean(errors.agenda) && (
-              <FormErrorMessage msg={errors.agenda?.message} />
+              </fieldset>
+            </div>
+
+            <div className="relative">
+              <fieldset>
+                <label className="block text-gray-800 mt-3 mb-1 font-sans font-bold">
+                  회의 시작시간
+                </label>
+                <input
+                  ref={register}
+                  name="start_time"
+                  type="datetime-local"
+                  placeholder="회의 시작시간"
+                  className="w-full focus:outline-none focus:border-gray-500 p-3 border-2  text-lg border-gray-200 transition-colors"
+                />
+                {Boolean(errors.start_time) && (
+                  <FormErrorMessage msg={errors.start_time?.message} />
+                )}
+              </fieldset>
+            </div>
+
+            <div className="relative">
+              <fieldset>
+                <label className="block text-gray-800 mt-3 mb-1 font-sans font-bold">
+                  Timezone
+                </label>
+                <input
+                  ref={register}
+                  name="timezone"
+                  type="text"
+                  disabled
+                  placeholder="Timezone"
+                  className="w-full focus:outline-none focus:border-gray-500 p-3 border-2  text-lg border-gray-200 transition-colors"
+                />
+                {Boolean(errors.timezone) && (
+                  <FormErrorMessage msg={errors.timezone?.message} />
+                )}
+              </fieldset>
+            </div>
+
+            <div className="relative">
+              <fieldset>
+                <label className="block text-gray-800 mt-3 mb-1 font-sans font-bold">
+                  회의 타입
+                </label>
+                <select
+                  ref={register}
+                  name="type"
+                  className="w-full focus:outline-none focus:border-gray-500 p-3 border-2  text-lg border-gray-200 transition-colors"
+                >
+                  <option value={1}>즉석 회의</option>
+                  <option value={2}>예약 회의</option>
+                </select>
+              </fieldset>
+            </div>
+
+            {Number(watch('type')) === 2 && (
+              <div className="relative">
+                <fieldset>
+                  <label className="block text-gray-800 mt-3 mb-1 font-sans font-bold">
+                    회의시간
+                  </label>
+                  <input
+                    ref={register}
+                    name="duration"
+                    type="text"
+                    placeholder="회의시간"
+                    className="w-full focus:outline-none focus:border-gray-500 p-3 border-2  text-lg border-gray-200 transition-colors"
+                  />
+                  {Boolean(errors.duration) && (
+                    <FormErrorMessage msg={errors.duration?.message} />
+                  )}
+                </fieldset>
+              </div>
             )}
 
-            <Button type="submit" size="large" className="w-full">
+            <div className="relative">
+              <fieldset>
+                <label className="block text-gray-800 mt-3 mb-1 font-sans font-bold">
+                  설명
+                </label>
+                <input
+                  ref={register}
+                  name="agenda"
+                  type="text"
+                  placeholder="설명"
+                  className="w-full focus:outline-none focus:border-gray-500 p-3 border-2  text-lg border-gray-200 transition-colors;"
+                />
+                {Boolean(errors.agenda) && (
+                  <FormErrorMessage msg={errors.agenda?.message} />
+                )}
+              </fieldset>
+            </div>
+
+            <Button type="submit" size="large" className="w-full mt-6">
               미팅룸 생성
             </Button>
           </form>

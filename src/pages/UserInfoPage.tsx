@@ -7,7 +7,7 @@ interface UserInfoPageProps {}
 const UserInfoPage: React.FC<UserInfoPageProps> = () => (
   <>
     <Header />
-    <div className="h-screen w-full">
+    <div className="h-screen w-screen">
       <div className="pb-16">
         <Switch>
           <Route
@@ -19,6 +19,6 @@ const UserInfoPage: React.FC<UserInfoPageProps> = () => (
       </div>
     </div>
   </>
-  );
+);
 
 export default UserInfoPage;

@@ -112,60 +112,103 @@ const MainPage: React.FC<MainPageProps> = () => {
         <meta name="robots" content="noindex" />
       </Helmet>
       <Header />
-
-      <div className="sm:w-768 mx-auto w-full">
-        <div className="lg:mt-14 md:mt-8 md:px-4 mt-5">
-          <h4 className="font-medium text-3xl mb-5">Connecting Zoom SDK</h4>
+      <div className="min-h-screen w-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md w-full space-y-8">
+          <div>
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+              Connect Zoom SDK
+            </h2>
+          </div>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <input
-              ref={register}
-              name="displayName"
-              type="text"
-              placeholder="유저명"
-              className="input"
-            />
-            {Boolean(errors.displayName) && (
-              <FormErrorMessage msg={errors.displayName?.message} />
-            )}
-            <input
-              ref={register}
-              name="meetingNumber"
-              type="text"
-              placeholder="미팅번호"
-              className="input"
-            />
-            {Boolean(errors.meetingNumber) && (
-              <FormErrorMessage msg={errors.meetingNumber?.message} />
-            )}
-            <input
-              ref={register}
-              name="meetingPassword"
-              type="password"
-              placeholder="미팅 비밀번호"
-              className="input"
-            />
-            {Boolean(errors.meetingPassword) && (
-              <FormErrorMessage msg={errors.meetingPassword?.message} />
-            )}
-            <input
-              ref={register}
-              name="email"
-              type="email"
-              placeholder="이메일"
-              className="input"
-            />
-            <select ref={register} name="role" className="input">
-              <option value={0}>참석자</option>
-              <option value={1}>주최자</option>
-              <option value={5}>도우미</option>
-            </select>
-
-            <select ref={register} name="lang" className="input">
-              <option value="en-US">영어</option>
-              <option value="ko-KO">한국어</option>
-            </select>
-
-            <Button type="submit" size="large" className="w-full">
+            <div className="relative">
+              <fieldset>
+                <label className="block text-gray-800 mt-3 mb-1 font-sans font-bold">
+                  유저명
+                </label>
+                <input
+                  ref={register}
+                  name="displayName"
+                  type="text"
+                  placeholder="유저명"
+                  className="input w-full mr-2"
+                />
+                {Boolean(errors.displayName) && (
+                  <FormErrorMessage msg={errors.displayName?.message} />
+                )}
+              </fieldset>
+            </div>
+            <div className="relative">
+              <fieldset>
+                <label className="block text-gray-800 mt-3 mb-1 font-sans font-bold">
+                  미팅번호
+                </label>
+                <input
+                  ref={register}
+                  name="meetingNumber"
+                  type="text"
+                  placeholder="미팅번호"
+                  className="input w-full mr-2"
+                />
+                {Boolean(errors.meetingNumber) && (
+                  <FormErrorMessage msg={errors.meetingNumber?.message} />
+                )}
+              </fieldset>
+            </div>
+            <div className="relative">
+              <fieldset>
+                <label className="block text-gray-800 mt-3 mb-1 font-sans font-bold">
+                  미팅 비밀번호
+                </label>
+                <input
+                  ref={register}
+                  name="meetingPassword"
+                  type="password"
+                  placeholder="미팅 비밀번호"
+                  className="input w-full mr-2"
+                />
+                {Boolean(errors.meetingPassword) && (
+                  <FormErrorMessage msg={errors.meetingPassword?.message} />
+                )}
+              </fieldset>
+            </div>
+            <div className="relative">
+              <fieldset>
+                <label className="block text-gray-800 mt-3 mb-1 font-sans font-bold">
+                  이메일
+                </label>
+                <input
+                  ref={register}
+                  name="email"
+                  type="email"
+                  placeholder="이메일"
+                  className="input w-full mr-2"
+                />
+              </fieldset>
+            </div>
+            <div className="relative">
+              <fieldset>
+                <label className="block text-gray-800 mt-3 mb-1 font-sans font-bold">
+                  타입
+                </label>
+                <select ref={register} name="role" className="input w-full">
+                  <option value={0}>참석자</option>
+                  <option value={1}>주최자</option>
+                  <option value={5}>도우미</option>
+                </select>
+              </fieldset>
+            </div>
+            <div className="relative">
+              <fieldset>
+                <label className="block text-gray-800 mt-3 mb-1 font-sans font-bold">
+                  언어
+                </label>
+                <select ref={register} name="lang" className="input w-full">
+                  <option value="en-US">영어</option>
+                  <option value="ko-KO">한국어</option>
+                </select>
+              </fieldset>
+            </div>
+            <Button type="submit" size="large" className="w-full mt-6">
               접속하기
             </Button>
           </form>

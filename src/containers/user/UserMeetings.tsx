@@ -56,9 +56,6 @@ const EmptyBlock = styled.div`
   flex-direction: column;
   margin-top: 6rem;
   margin-bottom: 3rem;
-  img {
-    width: 20rem;
-  }
   .message {
     font-size: 2rem;
     color: ${palette.gray6};

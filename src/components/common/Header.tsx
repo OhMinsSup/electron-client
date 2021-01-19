@@ -36,7 +36,10 @@ const Header: React.FC<HeaderProps> = () => {
             </Link>
             {user ? (
               <div className="right space-x-2">
-                <Link to="/" className="flex items-center space-x-2">
+                <Link
+                  to={`/@${user.id}`}
+                  className="flex items-center space-x-2"
+                >
                   <div className="w-8 h-8 overflow-hidden rounded-full">
                     <UserIcon className="w-full h-full object-cover" />
                   </div>

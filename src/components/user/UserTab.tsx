@@ -19,10 +19,9 @@ const UserTab: React.FC<UserTabProps> = ({ id, tab }) => {
   const withPrefix = (path: string) => `${url}/${path}`;
   const tabIndex = tabIndexMap[tab];
 
-  console.log('user');
   return (
-    <div className="flex my-20 justify-center">
-      <div className="flex relative">
+    <div className="flex justify-center md:my-20">
+      <TabWrapper className="flex relative">
         <TabItem exact to={url}>
           라이브 미팅룸
         </TabItem>
@@ -37,12 +36,18 @@ const UserTab: React.FC<UserTabProps> = ({ id, tab }) => {
             left: `${tabIndex * 33.3333}%`,
           }}
         />
-      </div>
+      </TabWrapper>
     </div>
   );
 };
 
 export default UserTab;
+
+const TabWrapper = styled.div`
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+`;
 
 const TabItem = styled(PlainNavLink)`
   display: flex;
@@ -59,6 +64,12 @@ const TabItem = styled(PlainNavLink)`
     color: ${palette.teal5};
     /* font-weight: bold; */
   }
+
+  @media (max-width: 768px) {
+    flex: 1;
+    font-size: 1rem;
+    height: 2.5rem;
+  }
 `;
 
 const Indicator = styled.div`
@@ -68,4 +79,8 @@ const Indicator = styled.div`
   position: absolute;
   bottom: -2px;
   transition: 0.25s left ease-in-out;
+
+  @media (max-width: 768px) {
+    width: 33.3333%;
+  }
 `;
