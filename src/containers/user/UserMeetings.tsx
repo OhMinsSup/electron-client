@@ -17,6 +17,9 @@ const UserMeetings: React.FC<UserMeetingsProps> = ({ id, tab }) => {
         type: tab,
         page_size: 30,
       }),
+    {
+      refetchInterval: 60000,
+    },
   );
 
   if (error) {

@@ -16,7 +16,8 @@ const hydrateUser = async (req, res, next) => {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-
+    
+    res.locals.accessToken = accessToken;
     req.session.user = response.data;
     req.session.save(() => {
       console.log('middleware:: 🌕 session save');

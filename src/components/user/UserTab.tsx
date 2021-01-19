@@ -35,7 +35,6 @@ const UserTab: React.FC<UserTabProps> = ({ id, tab }) => {
         <Indicator
           style={{
             left: `${tabIndex * 33.3333}%`,
-            // left: `${tabIndex * 50}%`,
           }}
         />
       </div>

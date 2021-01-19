@@ -1,5 +1,4 @@
 import axios from 'axios';
-import jwt from 'jsonwebtoken';
 import isEmpty from 'lodash/isEmpty';
 import queryString from 'query-string';
 import type { ListMeetingResponse } from './model/list-meeting';
@@ -28,48 +27,74 @@ const client = axios.create({
   withCredentials: true,
 });
 
-client.interceptors.request.use(
-  async (config) => {
-    // 요청을 보내기 전에 수행할 일
-    // authorization이 헤더 안에 있는지 확인
-    console.log('header prev');
-    if (!('authorization' in config.headers)) {
-      console.log('header inner');
-      // 없으면 바로 요청
-      return config;
-    }
-    console.log('header next');
+client.interceptors.response.use(
+  (config) => config,
+    // 오류 응답을 처리
+    async (error) => {
+      if (error.response.status === 401) {
+        console.info('refreshing....');
+        const { data, status } = await axios.post(`${baseURL}/auth/refresh`, {
+          refreshToken: refreshTokenFn(),
+        });
 
-    // 있으면 해당 accessToken의 만료일을 체크
-    const { authorization } = config.headers;
-    const accessToken = authorization.split(' ')[1];
-
-    // zoom accessToken 1시간이 만료시간
-    const { exp } = jwt.decode(accessToken) as { exp: number };
-    const diff = exp * 1000 - new Date().getTime();
-    // 해당 기능에서는 만료시간이 40분이면 다시 refresh하게 변경
-    if (diff < 1000 * 60 * 40) {
-      console.info('refreshing....');
-      const { data, status } = await axios.post(`${baseURL}/auth/refresh`, {
-        refreshToken: refreshTokenFn(),
-      });
-
-      if (status === 200) {
-        // 재발급이 성공하면 token값을 수정하고 다시 request를 보냄
-        const { accesToken, refreshToken } = data;
-        accessTokenFn(accesToken);
-        refreshTokenFn(refreshToken);
-        // eslint-disable-next-line no-param-reassign
-        config.headers.authorization = `Bearer ${accesToken}`;
-        return config;
+        if (status === 200) {
+          // 재발급이 성공하면 token값을 수정하고 다시 request를 보냄
+          const { accessToken, refreshToken } = data;
+          accessTokenFn(accessToken);
+          refreshTokenFn(refreshToken);
+          // eslint-disable-next-line no-param-reassign
+        }
       }
-    }
-    // 실패하거난 잘못된 요청은 일단 서버로 보냄
-    return config;
-  },
-  // 오류 응답을 처리
-  (error) => Promise.reject(error),
+      
+      return Promise.reject(error);
+    },
 );
+
+// client.interceptors.request.use(
+//   async (config) => {
+//     // 요청을 보내기 전에 수행할 일
+//     // authorization이 헤더 안에 있는지 확인
+//     console.log('header prev');
+//     if (!('authorization' in config.headers)) {
+//       console.log('header inner');
+//       // 없으면 바로 요청
+//       return config;
+//     }
+//     console.log('header next');
+
+//     // 있으면 해당 accessToken의 만료일을 체크
+//     const { authorization } = config.headers;
+//     const accessToken = authorization.split(' ')[1];
+
+//     // zoom accessToken 1시간이 만료시간
+//     const { exp } = jwt.decode(accessToken) as { exp: number };
+//     const diff = exp * 1000 - new Date().getTime();
+//     // 해당 기능에서는 만료시간이 40분이면 다시 refresh하게 변경
+//     if (diff < 1000 * 60 * 40) {
+//       console.info('refreshing....');
+//       const { data, status } = await axios.post(`${baseURL}/auth/refresh`, {
+//         refreshToken: refreshTokenFn(),
+//       });
+
+//       if (status === 200) {
+//         // 재발급이 성공하면 token값을 수정하고 다시 request를 보냄
+//         const { accesToken, refreshToken } = data;
+//         accessTokenFn(accesToken);
+//         refreshTokenFn(refreshToken);
+//         // eslint-disable-next-line no-param-reassign
+//         config.headers.authorization = `Bearer ${accesToken}`;
+//         return config;
+//       }
+//     }
+//     // 실패하거난 잘못된 요청은 일단 서버로 보냄
+//     return config;
+//   },
+//   // 오류 응답을 처리
+//   (error) => {
+//     console.log('ggod error', error);
+//     return Promise.reject(error);
+//   },
+// );
 
 export const AuthAPI = {
   tokens: () =>
@@ -91,18 +116,30 @@ export const UserAPI = {
 };
 
 export const MeetingAPI = {
+  deleteMeeting: (meetingId: string) =>
+    client
+      .delete(`/meeting/info/${meetingId}`, {
+        headers: {
+          Authorization: `Bearer ${accessTokenFn()}`,
+        },
+      })
+      .then((res) => ({ ...res.data, status: res.status })),
   createMeeting: (userId: string, body: any) =>
-    client.post<WriteMeetingResponse>(`/meeting/${userId}`, body, {
-      headers: {
-        Authorization: `Bearer ${accessTokenFn()}`,
-      },
-    }),
+    client
+      .post<WriteMeetingResponse>(`/meeting/${userId}`, body, {
+        headers: {
+          Authorization: `Bearer ${accessTokenFn()}`,
+        },
+      })
+      .then((res) => ({ ...res.data, status: res.status })),
   detailMeeting: (meetingId: string) =>
-    client.get<WriteMeetingResponse>(`/meeting/info/${meetingId}`, {
-      headers: {
-        Authorization: `Bearer ${accessTokenFn()}`,
-      },
-    }),
+    client
+      .get<WriteMeetingResponse>(`/meeting/info/${meetingId}`, {
+        headers: {
+          Authorization: `Bearer ${accessTokenFn()}`,
+        },
+      })
+      .then((res) => ({ ...res.data, status: res.status })),
   meetingUser: (userId: string, params?: any) =>
     client
       .get<ListMeetingResponse>(

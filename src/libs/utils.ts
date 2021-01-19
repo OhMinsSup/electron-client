@@ -1,3 +1,5 @@
+import { ZoomMtg as ZoomMtgType } from '@zoomus/websdk';
+
 export const DATE_FORMAT = 'yyyy-MM-ddTHH:mm:ss.SSSZ';
 
 export const setCookie = (cname: string, cvalue: string) => {
@@ -33,4 +35,11 @@ export const deleteAllCookies = () => {
     const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
     document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT`;
   }
+};
+
+export type ZoomType = typeof ZoomMtgType;
+
+export const config = {
+  ZOOM_API_KEY: process.env.REACT_APP_ZOOM_API_KEY,
+  ZOOM_SECRET_KEY: process.env.REACT_APP_ZOOM_SECRET_KET,
 };

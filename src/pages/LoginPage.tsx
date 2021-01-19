@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useQuery } from 'react-query';
 import { useHistory } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
@@ -37,17 +38,24 @@ const LoginPage: React.FC<LoginPageProps> = () => {
       }, 2000);
     }
   }, [user.data, token.data]);
+
   return (
-    <LoginPageBlock className="h-screen">
-      <div className="spinner">
-        <div className="sk-chase-dot" />
-        <div className="sk-chase-dot" />
-        <div className="sk-chase-dot" />
-        <div className="sk-chase-dot" />
-        <div className="sk-chase-dot" />
-        <div className="sk-chase-dot" />
-      </div>
-    </LoginPageBlock>
+    <>
+      <Helmet>
+        <title>Login Page | Zoom SDK</title>
+        <meta name="robots" content="noindex" />
+      </Helmet>
+      <LoginPageBlock className="h-screen">
+        <div className="spinner">
+          <div className="sk-chase-dot" />
+          <div className="sk-chase-dot" />
+          <div className="sk-chase-dot" />
+          <div className="sk-chase-dot" />
+          <div className="sk-chase-dot" />
+          <div className="sk-chase-dot" />
+        </div>
+      </LoginPageBlock>
+    </>
   );
 };
 

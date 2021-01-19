@@ -14,7 +14,7 @@ interface UserPageProps
 const UserPage: React.FC<UserPageProps> = ({ match }) => {
   const { id, tab } = match.params;
   return (
-    <div className="ml-auto mr-auto max-w-3xl">
+    <div className="sm:mx-auto max-w-3xl">
       <UserProfile id={id} />
       <UserTab id={id} tab={tab || 'live'} />
       <Route path="/@:id" exact component={MeetingsTab} />

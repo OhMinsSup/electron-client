@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useHistory } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
@@ -27,28 +28,35 @@ const UserProfile: React.FC<UserProfileProps> = () => {
   if (!user.user) return null;
 
   return (
-    <div className="mt-20">
-      <section className="flex items-center">
-        <img
-          className="block w-32 h-32 rounded-full object-cover shadow-md"
-          src={defaultImage}
-          alt="profile"
-        />
-        <div className="flex flex-col justify-center ml-4 font-sans">
-          <div className="text-xl font-bold">
-            <strong>
-              {user.user.last_name} {user.user.first_name}
-            </strong>
+    <>
+      <Helmet>
+        <title>{`${user.user.last_name}${user.user.first_name} - UserProfile`}</title>
+        <meta name="description" content="유저 상세 페이지" />
+      </Helmet>
+      <div className="px-4 mt-5 lg:px-0">
+        <section className="flex sm:items-center sm:flex-row flex-col items-start">
+          <img
+            className="block sm:w-32 sm:h-32 rounded-full object-cover shadow-md w-20 h-20"
+            src={defaultImage}
+            alt="profile"
+          />
+          <div className="flex flex-col justify-center sm:ml-4 sm:mt-0 ml-0 mt-4 font-sans space-y-2">
+            <div className="text-xl font-bold">
+              <strong>
+                <span>{user.user.last_name}</span>
+                <span>{user.user.first_name}</span>
+              </strong>
+            </div>
+            <div className="text-lg whitespace-pre-wrap">
+              <Button size="medium" onClick={onClick}>
+                미팅룸 생성
+              </Button>
+            </div>
           </div>
-          <div className="text-lg whitespace-pre-wrap">
-            <Button size="medium" onClick={onClick}>
-              미팅룸 생성
-            </Button>
-          </div>
-        </div>
-      </section>
-      <Separator />
-    </div>
+        </section>
+        <Separator className="sm:mt-8 sm:mb-6 mt-4 mb-4" />
+      </div>
+    </>
   );
 };
 
@@ -58,6 +66,4 @@ const Separator = styled.div`
   background: ${palette.gray2};
   width: 100%;
   height: 1px;
-  margin-top: 2rem;
-  margin-bottom: 1.5rem;
 `;
