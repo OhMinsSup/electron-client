@@ -4,58 +4,13 @@ import Header from '../components/base/Header';
 interface MeetingInfoPageProps {}
 const MeetingInfoPage: React.FC<MeetingInfoPageProps> = () => {
   const data = {
-    uuid: '8gzsh5YbSRagCm9Pl3UkFg==',
-    id: 87260400747,
-    host_id: 'MDAwYRyzS-u3G3lghMbltQ',
-    host_email: 'mins5190@naver.com',
-    topic: '테스트 회의',
-    type: 1,
-    status: 'waiting',
+    id: 123,
+    topic: '123',
+    encrypted_password: '12313',
+    created_at: new Date().toISOString(),
+    join_url: '123',
     timezone: 'Asia/Seoul',
-    agenda: '회의 설명',
-    created_at: '2021-01-18T09:49:50Z',
-    start_url:
-      'https://us05web.zoom.us/s/87260400747?zak=eyJ6bV9za20iOiJ6bV9vMm0iLCJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJjbGllbnQiLCJ1aWQiOiJNREF3WVJ5elMtdTNHM2xnaE1ibHRRIiwiaXNzIjoid2ViIiwic3R5IjoxMDAsIndjZCI6InVzMDUiLCJjbHQiOjAsInN0ayI6IlJjUGdob3I1c1ExRVV0VklsSlFxSnl4NXg1U21xMDljeHB5YlI1Zkg4QmsuQmdZZ1luZEJObGcxZDFrdldGQkNlblZUYUVzd1EwaGhiek00VEU1V1ZIbFlaMmxBWVRRd05EQmxOREJtWkRWa00yWTFPVGs1WTJKaU56RmtOV0V4TTJJMVpXRTBPV0pqWVRneE9HWTFZVGt3TkRCbU9ESTVaVE5rTjJKa1lXWXpabUl4TkFBZ1pVSnlWa2hPTlc5NFpqSjBURTVLYkd4WFFtOXlhR3hqUzBOeWR6ZDNla2tBQkhWek1EVUFBQUYzRk9hdjl3QVNkUUFBQUEiLCJleHAiOjE2MTA5NzA1OTgsImlhdCI6MTYxMDk2MzM5OCwiYWlkIjoicVFoSFFDUl9TZ3lNR0J3NmppRVI0USIsImNpZCI6IiJ9.Ge_yRY3QW8Vwx-JpDME66KOp5RCO4xC_8QOlyhxBdbY',
-    join_url:
-      'https://us05web.zoom.us/j/87260400747?pwd=UVBXSFFJdXJYSU4wbGZrQ0tOVm1PUT09',
-    password: '1q2w3e4r',
-    h323_password: '27059895',
-    pstn_password: '27059895',
-    encrypted_password: 'UVBXSFFJdXJYSU4wbGZrQ0tOVm1PUT09',
-    settings: {
-      host_video: false,
-      participant_video: false,
-      cn_meeting: false,
-      in_meeting: false,
-      join_before_host: false,
-      jbh_time: 0,
-      mute_upon_entry: false,
-      watermark: false,
-      use_pmi: false,
-      approval_type: 2,
-      audio: 'voip',
-      auto_recording: 'none',
-      enforce_login: false,
-      enforce_login_domains: '',
-      alternative_hosts: '',
-      close_registration: false,
-      show_share_button: false,
-      allow_multiple_devices: false,
-      registrants_confirmation_email: true,
-      waiting_room: true,
-      request_permission_to_unmute_participants: false,
-      registrants_email_notification: true,
-      meeting_authentication: false,
-      encryption_type: 'enhanced_encryption',
-      approved_or_denied_countries_or_regions: {
-        enable: false,
-      },
-      breakout_room: {
-        enable: false,
-      },
-    },
   };
-  console.log(data);
   return (
     <>
       <Header />
