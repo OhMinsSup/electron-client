@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
-import { AuthAPI } from '../../libs/api/client';
+import { AuthAPI, serverURL } from '../../libs/api/client';
 import { userState } from '../../store/user';
 import { UserIcon } from '../../styles/svg';
 
@@ -15,7 +15,7 @@ const Header: React.FC<HeaderProps> = () => {
   const { user } = useRecoilValue(userState);
 
   const onZoomLogin = React.useCallback(() => {
-    window.location.href = 'http://localhost:5000/api/auth/redirect/zoom';
+    window.location.href = `${serverURL}/auth/redirect/zoom`;
   }, []);
 
   const onLogout = React.useCallback(() => {

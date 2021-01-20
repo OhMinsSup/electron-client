@@ -12,6 +12,8 @@ import MeetingInfoPage from './pages/MeetingInfoPage';
 
 declare const ZoomMtg: typeof ZoomMtgType;
 
+console.log((ZoomMtg as any).checkSystemRequirements());
+// WebSDK 종속성 링크 리소스를 변경하려는 경우 옵션입니다. setZoomJSLib는 처음에 실행되어야합니다.
 ZoomMtg.setZoomJSLib('https://source.zoom.us/1.8.5/lib', '/av');
 ZoomMtg.preLoadWasm();
 ZoomMtg.prepareJssdk();

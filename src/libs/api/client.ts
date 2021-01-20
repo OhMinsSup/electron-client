@@ -4,6 +4,7 @@ import queryString from 'query-string';
 import type { ListMeetingResponse } from './model/list-meeting';
 import type { WriteMeetingResponse } from './model/write-meeting';
 import type { TokensResponse, UserResponse } from './model/user';
+import { ListRecordingResponse } from './model/list-recording';
 
 export const userFn = (user?: any) =>
   user
@@ -20,10 +21,13 @@ export const refreshTokenFn = (token?: string) =>
     ? localStorage.setItem('@zoom::refreshToken', token)
     : localStorage.getItem('@zoom::refreshToken') || '';
 
-const baseURL: string = 'http://localhost:5000/api';
+export const serverURL: string =
+  process.env.NODE_ENV === 'development' ? 'http://localhost:5000/api' : '';
+export const clientURL: string =
+  process.env.NODE_ENV === 'development' ? 'http://localhost:4000' : '';
 
 const client = axios.create({
-  baseURL,
+  baseURL: serverURL,
   withCredentials: true,
 });
 
@@ -33,7 +37,7 @@ client.interceptors.response.use(
     async (error) => {
       if (error.response.status === 401) {
         console.info('🚀 refreshing....');
-        const { data, status } = await axios.post(`${baseURL}/auth/refresh`, {
+        const { data, status } = await axios.post(`${serverURL}/auth/refresh`, {
           refreshToken: refreshTokenFn(),
         });
 
@@ -68,6 +72,22 @@ export const UserAPI = {
       .then((res) => ({ ...res.data, status: res.status })),
 };
 
+export const RecordingAPI = {
+  recordingUser: (params?: any) =>
+    client
+      .get<ListRecordingResponse>(
+        '/recording?'.concat(
+          isEmpty(params) ? '' : queryString.stringify(params),
+        ),
+        {
+          headers: {
+            Authorization: `Bearer ${accessTokenFn()}`,
+          },
+        },
+      )
+      .then((res) => ({ ...res.data, status: res.status })),
+};
+
 export const MeetingAPI = {
   deleteMeeting: (meetingId: string) =>
     client
@@ -80,6 +100,14 @@ export const MeetingAPI = {
   createMeeting: (userId: string, body: any) =>
     client
       .post<WriteMeetingResponse>(`/meeting`, body, {
+        headers: {
+          Authorization: `Bearer ${accessTokenFn()}`,
+        },
+      })
+      .then((res) => ({ ...res.data, status: res.status })),
+  updateMeeting: (meetingId: string, body: any) =>
+    client
+      .put(`/meeting/${meetingId}`, body, {
         headers: {
           Authorization: `Bearer ${accessTokenFn()}`,
         },

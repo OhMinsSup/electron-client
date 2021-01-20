@@ -5,13 +5,13 @@ import PlainNavLink from '../common/PlainNavLink';
 
 interface UserTabProps {
   id: string;
-  tab: 'live' | 'scheduled' | 'upcoming';
+  tab: 'meeting' | 'recording' | 'test';
 }
 
 const tabIndexMap = {
-  live: 0,
-  scheduled: 1,
-  upcoming: 2,
+  meeting: 0,
+  recording: 1,
+  test: 2,
 };
 
 const UserTab: React.FC<UserTabProps> = ({ id, tab }) => {
@@ -25,11 +25,11 @@ const UserTab: React.FC<UserTabProps> = ({ id, tab }) => {
         <TabItem exact to={url}>
           미팅룸
         </TabItem>
-        <TabItem exact to={withPrefix('scheduled')}>
-          예약 미팅룸
+        <TabItem exact to={withPrefix('recording')}>
+          레코딩
         </TabItem>
-        <TabItem exact to={withPrefix('upcoming')}>
-          대기 미팅룸
+        <TabItem exact to={withPrefix('test')}>
+          로그
         </TabItem>
         <Indicator
           style={{

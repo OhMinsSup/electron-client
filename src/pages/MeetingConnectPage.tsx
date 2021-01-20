@@ -1,6 +1,7 @@
 import React from 'react';
 import { ZoomMtg as ZoomMtgType } from '@zoomus/websdk';
 import { useHistory } from 'react-router-dom';
+import { clientURL } from '../libs/api/client';
 
 declare const ZoomMtg: typeof ZoomMtgType;
 
@@ -21,7 +22,7 @@ const MeetingConnectPage: React.FC<MeetingConnectPageProps> = () => {
       const json = JSON.parse(stringify);
 
       ZoomMtg.init({
-        leaveUrl: 'http://localhost:4000',
+        leaveUrl: clientURL,
         success: () => {
           ZoomMtg.i18n.load(json.lang);
           ZoomMtg.i18n.reload(json.lang);
@@ -35,12 +36,38 @@ const MeetingConnectPage: React.FC<MeetingConnectPageProps> = () => {
             userEmail: json.email,
             success: (joinRes: any) => {
               console.log('success joinRes', joinRes);
-              ZoomMtg.getAttendeeslist({});
+
+              ZoomMtg.showRecordFunction({
+                show: true,
+              });
+
+              ZoomMtg.getAttendeeslist({
+                success: (res: any) => {
+                  console.log('success getAttendeeslist', res);
+                },
+                error: (error: any) => {
+                  console.error('error getAttendeeslist', error);
+                },
+              });
+
               ZoomMtg.getCurrentUser({
                 success: (res: any) => {
                   console.log('success getCurrentUser', res.result.currentUser);
                 },
+                error: (error: any) => {
+                  console.error('error getCurrentUser', error);
+                },
               });
+
+              // ZoomMtg.record({
+              //   record: true,
+              //   success: (res: any) => {
+              //     console.log('success record', res);
+              //   },
+              //   error: (error: any) => {
+              //     console.error('error record', error);
+              //   },
+              // });
             },
             error: (error: any) => {
               console.error(error);

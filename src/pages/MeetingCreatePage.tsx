@@ -45,9 +45,19 @@ const MeetingCreatePage: React.FC<MeetingCreatePageProps> = () => {
   const history = useHistory();
   const state = useRecoilValue(userState);
 
-  const mutation = useMutation<any, any, any, any>((data) =>
-    MeetingAPI.createMeeting(state.user?.id!, data),
-  );
+  const mutation = useMutation<any, any, any, any>((data) => {
+    const { user } = state;
+    if (user && user.id) {
+      return MeetingAPI.createMeeting(user.id, data);
+    }
+    return Promise.resolve({
+      meetings: [],
+      ok: false,
+      error: null,
+      status: 404,
+    });
+  });
+
   const {
     register,
     errors,
@@ -93,7 +103,6 @@ const MeetingCreatePage: React.FC<MeetingCreatePageProps> = () => {
   React.useEffect(() => () => reset(), []);
 
   React.useEffect(() => {
-    console.log(mutation.data);
     if (mutation.isSuccess) {
       swal({
         title: '미팅룸',

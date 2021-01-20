@@ -1,4 +1,5 @@
 const { Router } = require('express');
+
 const authorized = require('../middlewares/authorized');
 
 const user = Router();

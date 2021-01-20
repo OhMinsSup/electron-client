@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const axios = require('axios').default;
-const { ZOOM_API } = require('../config/contant');
+const { ZOOM_API, CLIENT_URL } = require('../config/contant');
 
 const auth = Router();
 
@@ -108,7 +108,7 @@ auth.get('/callback/zoom', async (req, res) => {
       });
     }
 
-    res.redirect('http://localhost:4000/login');
+    res.redirect(`${CLIENT_URL}/login`);
   } catch (e) {
     console.error(e);
     res.status(e.response.status).json({

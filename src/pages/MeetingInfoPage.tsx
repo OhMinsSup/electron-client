@@ -27,8 +27,8 @@ const MeetingInfoPage: React.FC<MeetingInfoPageProps> = () => {
   const [role, setRole] = useState(0);
 
   const { data, isLoading, error } = useQuery<any, any, any>(
-    'myMeetingsData',
-    () => MeetingAPI.detailMeeting(id),
+    ['myMeetingsData', { id }],
+    (query) => MeetingAPI.detailMeeting(query.queryKey[1].id),
     {
       refetchInterval: 60000,
     },
@@ -60,31 +60,33 @@ const MeetingInfoPage: React.FC<MeetingInfoPageProps> = () => {
       apiSecret: `${ZOOM_SECRET_KEY}`,
       role: `${role}`,
       success: (res: any) => {
-        const payload: { key: any; value: any }[] = [
-          { key: 'apiKey', value: config.ZOOM_API_KEY },
-          { key: 'signature', value: res.result },
-          {
-            key: 'displayName',
-            value: `${state.user?.last_name} ${state.user?.first_name}`,
-          },
-          { key: 'password', value: data?.meeting.encrypted_password },
-          { key: 'meetingNumber', value: data?.meeting.id },
-          { key: 'email', value: state.user?.email },
-          { key: 'role', value: `${role}` },
-          { key: 'i18n', value: 0 },
-          { key: 'lang', value: state.user?.language },
-        ];
+        if (state.user) {
+          const payload: { key: any; value: any }[] = [
+            { key: 'apiKey', value: config.ZOOM_API_KEY },
+            { key: 'signature', value: res.result },
+            {
+              key: 'displayName',
+              value: `${state.user.last_name} ${state.user.first_name}`,
+            },
+            { key: 'password', value: data.meeting.encrypted_password },
+            { key: 'meetingNumber', value: data.meeting.id },
+            { key: 'email', value: state.user.email },
+            { key: 'role', value: `${role}` },
+            { key: 'i18n', value: `${0}` },
+            { key: 'lang', value: state.user.language },
+          ];
 
-        const obj = {};
-        payload.forEach((o) => {
-          Object.assign(obj, { [o.key]: o.value });
-        });
+          const obj = {};
+          payload.forEach((o) => {
+            Object.assign(obj, { [o.key]: o.value });
+          });
 
-        localStorage.setItem('@@zoom', JSON.stringify(obj));
-        history.push('/meeting-connect');
+          localStorage.setItem('@@zoom', JSON.stringify(obj));
+          history.push('/meeting-connect');
+        }
       },
     });
-  }, []);
+  }, [state.user, data]);
 
   React.useEffect(() => {
     localStorage.removeItem('@@zoom');
@@ -121,9 +123,9 @@ const MeetingInfoPage: React.FC<MeetingInfoPageProps> = () => {
                 <div className="px-4 pb-6">
                   <dd className="text-sm sm:text-base">
                     <time dateTime={data.meeting.created_at as any}>
-                      {data && data.meeting
+                      {data && data.meeting && data.meeting.start_time
                         ? format(
-                            new Date(data?.meeting.start_time),
+                            new Date(data.meeting.start_time),
                             `yyyy-MM-dd HH:mm a`,
                           )
                         : ''}

@@ -11,7 +11,7 @@ const UserInfoPage: React.FC<UserInfoPageProps> = () => (
       <div className="pb-16">
         <Switch>
           <Route
-            path={['/@:id', '/@:id/:tab(live|scheduled|upcoming)']}
+            path={['/@:id', '/@:id/:tab(meeting|recording|test)']}
             component={UserPage}
             exact
           />

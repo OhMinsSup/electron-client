@@ -40,6 +40,13 @@
     <script src="https://source.zoom.us/1.8.5/lib/vendor/redux-thunk.min.js"></script>
     <script src="https://source.zoom.us/1.8.5/lib/vendor/lodash.min.js"></script>
     <script src="https://source.zoom.us/zoom-meeting-1.8.5.min.js"></script>
+    <script>
+      // https://github.com/GoogleChromeLabs/wasm-feature-detect
+      const simd = async () => WebAssembly.validate(new Uint8Array([0, 97, 115, 109, 1, 0, 0, 0, 1, 4, 1, 96, 0, 0, 3, 2, 1, 0, 10, 9, 1, 7, 0, 65, 0, 253, 15, 26, 11]))
+      simd().then((simdSupported) => {
+        console.log("simd check", simdSupported);
+      });
+    </script>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
