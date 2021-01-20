@@ -20,10 +20,10 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 try {
-  fs.accessSync('upload');
+  fs.accessSync('tmp/upload');
 } catch (error) {
   console.log('upload 폴더가 없으므로 생성합니다.');
-  fs.mkdirSync('upload');
+  fs.mkdirSync('tmp/upload');
 }
 
 app.use(
@@ -42,7 +42,7 @@ app.use(bodyParser.json());
 app.use(
   fileUpload({
     useTempFiles: true,
-    tempFileDir: 'upload',
+    tempFileDir: 'tmp/upload',
   }),
 );
 app.use(cookieParser());
