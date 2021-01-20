@@ -23,7 +23,7 @@ const UserTab: React.FC<UserTabProps> = ({ id, tab }) => {
     <div className="flex justify-center md:my-20">
       <TabWrapper className="flex relative">
         <TabItem exact to={url}>
-          라이브 미팅룸
+          미팅룸
         </TabItem>
         <TabItem exact to={withPrefix('scheduled')}>
           예약 미팅룸

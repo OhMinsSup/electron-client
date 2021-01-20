@@ -1,17 +1,18 @@
-const { default: axios } = require('axios');
-const queryString = require('query-string');
 const { Router } = require('express');
+const axios = require('axios').default;
+const queryString = require('query-string');
+
+const authorized = require('../middlewares/authorized');
+const { ZOOM_API } = require('../config/contant');
 
 const meeting = Router();
 
-meeting.get('/:userId', async (req, res) => {
-  try {
-    const { userId } = req.params;
-    const query = queryString.stringify(req.query);
-    const url = `https://api.zoom.us/v2/users/${userId}/meetings?`.concat(
-      query || '',
-    );
+meeting.get('/', authorized, async (req, res) => {
+  const { id: userId } = req.session.user;
+  const query = queryString.stringify(req.query);
+  const url = `${ZOOM_API}/users/${userId}/meetings?`.concat(query || '');
 
+  try {
     const response = await axios.get(url, {
       headers: {
         Authorization: `Bearer ${res.locals.accessToken}`,
@@ -25,18 +26,19 @@ meeting.get('/:userId', async (req, res) => {
     });
   } catch (e) {
     console.error(e);
-    return res.status(e.response.status || 400).json({
+    return res.status(e.response.status).json({
       ok: false,
       error: 'Error: 4000: Data is NotFound',
     });
   }
 });
 
-meeting.post('/:userId', async (req, res) => {
+meeting.post('/', authorized, async (req, res) => {
+  const { id: userId } = req.session.user;
+
   try {
-    const { userId } = req.params;
     const response = await axios.post(
-      `https://api.zoom.us/v2/users/${userId}/meetings`,
+      `${ZOOM_API}/users/${userId}/meetings`,
       req.body,
       {
         headers: {
@@ -52,21 +54,19 @@ meeting.post('/:userId', async (req, res) => {
     });
   } catch (e) {
     console.error(e);
-    return res.status(e.response.status || 400).json({
+    return res.status(e.response.status).json({
       ok: false,
       error: 'Error: 4000: Data is NotFound',
     });
   }
 });
 
-meeting.delete('/info/:meetingId', async (req, res) => {
-  try {
-    const { meetingId } = req.params;
-    const query = queryString.stringify(req.query);
-    const url = `https://api.zoom.us/v2/meetings/${meetingId}?`.concat(
-      query || '',
-    );
+meeting.delete('/:meetingId', authorized, async (req, res) => {
+  const { meetingId } = req.params;
+  const query = queryString.stringify(req.query);
+  const url = `${ZOOM_API}/meetings/${meetingId}?`.concat(query || '');
 
+  try {
     await axios.delete(url, {
       headers: {
         Authorization: `Bearer ${res.locals.accessToken}`,
@@ -79,25 +79,22 @@ meeting.delete('/info/:meetingId', async (req, res) => {
     });
   } catch (e) {
     console.error(e);
-    return res.status(e.response.status || 400).json({
+    return res.status(e.response.status).json({
       ok: false,
       error: 'Error: 4000: Data is NotFound',
     });
   }
 });
 
-meeting.get('/info/:meetingId', async (req, res) => {
-  try {
-    const { meetingId } = req.params;
+meeting.get('/:meetingId', authorized, async (req, res) => {
+  const { meetingId } = req.params;
 
-    const response = await axios.get(
-      `https://api.zoom.us/v2/meetings/${meetingId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${res.locals.accessToken}`,
-        },
+  try {
+    const response = await axios.get(`${ZOOM_API}/meetings/${meetingId}`, {
+      headers: {
+        Authorization: `Bearer ${res.locals.accessToken}`,
       },
-    );
+    });
 
     return res.status(200).json({
       ok: true,
@@ -106,7 +103,7 @@ meeting.get('/info/:meetingId', async (req, res) => {
     });
   } catch (e) {
     console.error(e);
-    return res.status(e.response.status || 400).json({
+    return res.status(e.response.status).json({
       ok: false,
       error: 'Error: 4000: Data is NotFound',
     });

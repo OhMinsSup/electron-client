@@ -1,5 +1,6 @@
 export interface ListMeetingModel {
   created_at: Date;
+  agenda: string;
   duration: number;
   host_id: string;
   id: number;

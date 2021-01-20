@@ -1,4 +1,5 @@
-const { default: axios } = require('axios');
+const axios = require('axios').default;
+const { ZOOM_API } = require('../config/contant');
 
 const hydrateUser = async (req, res, next) => {
   if (!req.headers.authorization) {
@@ -11,13 +12,15 @@ const hydrateUser = async (req, res, next) => {
   }
 
   try {
-    const response = await axios.get('https://api.zoom.us/v2/users/me', {
+    const response = await axios.get(`${ZOOM_API}/users/me`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
     
     res.locals.accessToken = accessToken;
+    res.locals.user = response.data;
+    
     req.session.user = response.data;
     req.session.save(() => {
       console.log('middleware:: 🌕 session save');

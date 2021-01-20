@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const axios = require('axios').default;
+const { ZOOM_API } = require('../config/contant');
 
 const auth = Router();
 
@@ -58,11 +59,10 @@ auth.post('/refresh', async (req, res) => {
       refreshToken: data.refresh_token,
     });
   } catch (e) {
-    return res.status(403).json({
+    console.error(e);
+    return res.status(e.response.status).json({
       ok: true,
       error: 'Error 57533: Refresh token is not valid',
-      accessToken: null,
-      refreshToken: null,
     });
   }
 });
@@ -79,44 +79,52 @@ auth.get('/tokens', (req, res) => {
 auth.get('/callback/zoom', async (req, res) => {
   const { code } = req.query;
 
-  if (code) {
-    const url = `https://zoom.us/oauth/token?grant_type=authorization_code&code=${code}&redirect_uri=${ZOOM_REDIRECT_URL}`;
-    const tokenData = await axios.post(
-      url,
-      {},
-      {
-        headers: {
-          Authorization: `Basic ${Buffer.from(
-            `${ZOOM_CLIENT_ID}:${ZOOM_CLIENT_SECRET}`,
-          ).toString('base64')}`,
+  try {
+    if (code) {
+      const url = `https://zoom.us/oauth/token?grant_type=authorization_code&code=${code}&redirect_uri=${ZOOM_REDIRECT_URL}`;
+      const tokenData = await axios.post(
+        url,
+        {},
+        {
+          headers: {
+            Authorization: `Basic ${Buffer.from(
+              `${ZOOM_CLIENT_ID}:${ZOOM_CLIENT_SECRET}`,
+            ).toString('base64')}`,
+          },
         },
-      },
-    );
+      );
 
-    const userData = await axios.get('https://api.zoom.us/v2/users/me', {
-      headers: {
-        Authorization: `Bearer ${tokenData.data.access_token}`,
-      },
-    });
+      const userData = await axios.get(`${ZOOM_API}/users/me`, {
+        headers: {
+          Authorization: `Bearer ${tokenData.data.access_token}`,
+        },
+      });
 
-    req.session.accessToken = tokenData.data.access_token;
-    req.session.refreshToken = tokenData.data.refresh_token;
-    req.session.user = userData.data;
-    req.session.save(() => {
-      console.log('callback/login:: 🌕 session save');
+      req.session.accessToken = tokenData.data.access_token;
+      req.session.refreshToken = tokenData.data.refresh_token;
+      req.session.user = userData.data;
+      req.session.save(() => {
+        console.log('callback/login:: 🌕 session save');
+      });
+    }
+
+    res.redirect('http://localhost:4000/login');
+  } catch (e) {
+    console.error(e);
+    res.status(e.response.status).json({
+      ok: false,
+      error: 'Error: 4000: Data is NotFound',
     });
   }
-
-  res.redirect('http://localhost:4000/login');
 });
 
 auth.get('/redirect/zoom', (req, res) => {
   req.session.destroy(() => {
     console.log('redirect/zoom destory:: 🌖 session destory');
   });
-  res.redirect(
-    `https://zoom.us/oauth/authorize?response_type=code&client_id=${ZOOM_CLIENT_ID}&redirect_uri=${ZOOM_REDIRECT_URL}`,
-  );
+
+  const path = `https://zoom.us/oauth/authorize?response_type=code&client_id=${ZOOM_CLIENT_ID}&redirect_uri=${ZOOM_REDIRECT_URL}`;
+  res.redirect(path);
 });
 
 module.exports = auth;

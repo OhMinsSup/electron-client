@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import { useHistory, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
+import format from 'date-fns/format';
 import swal from 'sweetalert';
 import { Helmet } from 'react-helmet-async';
 
@@ -22,12 +23,22 @@ const MeetingInfoPage: React.FC<MeetingInfoPageProps> = () => {
   const state = useRecoilValue(userState);
   const history = useHistory();
   const { id } = useParams<Params>();
+
+  const [role, setRole] = useState(0);
+
   const { data, isLoading, error } = useQuery<any, any, any>(
     'myMeetingsData',
     () => MeetingAPI.detailMeeting(id),
     {
       refetchInterval: 60000,
     },
+  );
+
+  const onRoleChange = React.useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setRole(+e.target.value);
+    },
+    [],
   );
 
   const onDelete = React.useCallback(async () => {
@@ -47,7 +58,7 @@ const MeetingInfoPage: React.FC<MeetingInfoPageProps> = () => {
       meetingNumber: data?.meeting.id,
       apiKey: `${ZOOM_API_KEY}`,
       apiSecret: `${ZOOM_SECRET_KEY}`,
-      role: `${1}`,
+      role: `${role}`,
       success: (res: any) => {
         const payload: { key: any; value: any }[] = [
           { key: 'apiKey', value: config.ZOOM_API_KEY },
@@ -59,7 +70,7 @@ const MeetingInfoPage: React.FC<MeetingInfoPageProps> = () => {
           { key: 'password', value: data?.meeting.encrypted_password },
           { key: 'meetingNumber', value: data?.meeting.id },
           { key: 'email', value: state.user?.email },
-          { key: 'role', value: `${1}` },
+          { key: 'role', value: `${role}` },
           { key: 'i18n', value: 0 },
           { key: 'lang', value: state.user?.language },
         ];
@@ -105,15 +116,17 @@ const MeetingInfoPage: React.FC<MeetingInfoPageProps> = () => {
                 <h2 className="text-xl font-semibold text-black px-4 py-6 pb-1">
                   {data?.meeting.topic}
                 </h2>
-                {/* <Button size="medium" onClick={onShare}>
-                  공유하기
-                </Button> */}
               </div>
               <dl className="flex flex-wrap divide-y divide-gray-200 border-b border-gray-200">
                 <div className="px-4 pb-6">
                   <dd className="text-sm sm:text-base">
                     <time dateTime={data.meeting.created_at as any}>
-                      {data?.meeting.created_at}
+                      {data && data.meeting
+                        ? format(
+                            new Date(data?.meeting.start_time),
+                            `yyyy-MM-dd HH:mm a`,
+                          )
+                        : ''}
                       <span className="sr-only sm:not-sr-only">
                         {' '}
                         {data?.meeting.timezone}
@@ -164,6 +177,23 @@ const MeetingInfoPage: React.FC<MeetingInfoPageProps> = () => {
                     <a href={data?.meeting.join_url}>
                       {data?.meeting.join_url}
                     </a>
+                  </dd>
+                </div>
+
+                <div className="w-full flex-none flex items-baseline px-4 py-4">
+                  <dt className="w-1/5 flex-none uppercase text-xs font-semibold tracking-wide">
+                    참석자 타입
+                  </dt>
+                  <dd className="text-black text-sm">
+                    <select
+                      name="role"
+                      className="input w-full"
+                      onChange={onRoleChange}
+                    >
+                      <option value={0}>참석자</option>
+                      <option value={1}>주최자</option>
+                      <option value={5}>도우미</option>
+                    </select>
                   </dd>
                 </div>
               </dl>

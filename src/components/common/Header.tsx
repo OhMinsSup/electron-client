@@ -28,7 +28,7 @@ const Header: React.FC<HeaderProps> = () => {
 
   return (
     <>
-      <div className="fixed w-full bg-white shadow-md">
+      <div className="fixed bg-white shadow-md w-screen">
         <Responsive>
           <Wrapper>
             <Link to="/" className="logo">

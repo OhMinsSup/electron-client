@@ -7,7 +7,7 @@ interface MeetingsTabProps
     id: string;
   }> {}
 const MeetingsTab: React.FC<MeetingsTabProps> = ({ match }) => (
-  <UserMeetings id={match.params.id} tab="live" />
+  <UserMeetings id={match.params.id} />
 );
 
 export default MeetingsTab;

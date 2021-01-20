@@ -1,25 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import styled from 'styled-components';
 import ListItem from '../../components/card/ListItem';
+import Select from '../../components/common/Select';
 import { MeetingAPI } from '../../libs/api/client';
 import palette from '../../libs/styles/palette';
 
 interface UserMeetingsProps {
   id: string;
-  tab?: 'live' | 'scheduled' | 'upcoming';
 }
-const UserMeetings: React.FC<UserMeetingsProps> = ({ id, tab }) => {
+const UserMeetings: React.FC<UserMeetingsProps> = ({ id }) => {
+  const [listType, setListType] = useState('live');
+
   const { data, isLoading, error } = useQuery<any, any, any>(
-    'myMeetingsData',
-    () =>
-      MeetingAPI.meetingUser(id, {
-        type: tab,
+    ['myMeetingsData', { type: listType }],
+    (query) => {
+      const { type } = query.queryKey[1];
+      return MeetingAPI.meetingUser(id, {
+        type,
         page_size: 30,
-      }),
+      });
+    },
     {
       refetchInterval: 60000,
     },
+  );
+
+  const onClick = React.useCallback(
+    (e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
+      const { type } = e.currentTarget.dataset;
+      if (type) {
+        setListType(type);
+      }
+    },
+    [],
   );
 
   if (error) {
@@ -34,6 +48,7 @@ const UserMeetings: React.FC<UserMeetingsProps> = ({ id, tab }) => {
 
   return (
     <>
+      <Select listType={listType} onClick={onClick} />
       {data.meetings && data.meetings.length ? (
         data.meetings.map((meeting: any) => (
           <ListItem key={meeting.uuid} meeting={meeting} />
