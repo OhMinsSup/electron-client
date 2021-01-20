@@ -27,16 +27,19 @@ const ListItem: React.FC<ListItemProps> = ({ meeting }) => (
         <p>
           회의 시작시간:{' '}
           {meeting.start_time
-              ? format(new Date(meeting.start_time), `yyyy-MM-dd HH:mm a`)
-              : '없음'}
+            ? format(
+                new Date(meeting.start_time.substring(0, 16)),
+                `yyyy-MM-dd HH:mm a`,
+              )
+            : '없음'}
         </p>
         <p>{meeting.agenda || ''}</p>
       </div>
-      ) : (
-        <p>{meeting.agenda || ''}</p>
-      )}
+    ) : (
+      <p>{meeting.agenda || ''}</p>
+    )}
   </PostItemBlock>
-  );
+);
 
 export default React.memo(ListItem);
 

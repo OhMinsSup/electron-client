@@ -2,9 +2,10 @@ import React from 'react';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
+import qs from 'query-string';
 import { useRecoilValue } from 'recoil';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import swal from 'sweetalert';
 import { Helmet } from 'react-helmet-async';
 import Header from '../components/common/Header';
@@ -33,29 +34,48 @@ const schema = yup.object().shape({
 interface FormFieldValue {
   topic: string;
   type: number;
-  start_time: Date;
+  start_time: any;
   timezone: string;
   password: string;
   agenda: string;
   duration?: number;
 }
 
+const initState = {
+  topic: '',
+  type: 1,
+  timezone: 'Asia/Seoul',
+  start_time: new Date().toISOString().substring(0, 16),
+  duration: 0,
+  agenda: '',
+  password: '',
+};
+
 interface MeetingCreatePageProps {}
 const MeetingCreatePage: React.FC<MeetingCreatePageProps> = () => {
   const history = useHistory();
-  const state = useRecoilValue(userState);
+  const location = useLocation();
+
+  const { user } = useRecoilValue(userState);
+
+  const { id }: { id?: string } = qs.parse(location.search);
+
+  const readMeetingForEdit = useQuery<any, any, any>(
+    ['modifyMeetingData', { id: id || null }],
+    (query) => {
+      const { id: meetingId } = query.queryKey[1];
+      if (meetingId) {
+        return MeetingAPI.detailMeeting(meetingId);
+      }
+      return Promise.resolve();
+    },
+  );
 
   const mutation = useMutation<any, any, any, any>((data) => {
-    const { user } = state;
     if (user && user.id) {
       return MeetingAPI.createMeeting(user.id, data);
     }
-    return Promise.resolve({
-      meetings: [],
-      ok: false,
-      error: null,
-      status: 404,
-    });
+    return Promise.resolve();
   });
 
   const {
@@ -64,20 +84,13 @@ const MeetingCreatePage: React.FC<MeetingCreatePageProps> = () => {
     watch,
     reset,
     clearErrors,
+    setValue,
     getValues,
     handleSubmit,
   } = useForm<FormFieldValue>({
     mode: 'onChange',
     resolver: yupResolver(schema) as any,
-    defaultValues: {
-      topic: '',
-      type: 1,
-      timezone: 'Asia/Seoul',
-      start_time: new Date().toISOString(),
-      duration: 0,
-      agenda: '',
-      password: '',
-    },
+    defaultValues: initState,
   });
 
   const onSubmit = async () => {
@@ -90,15 +103,36 @@ const MeetingCreatePage: React.FC<MeetingCreatePageProps> = () => {
       'agenda',
       'duration',
     ]);
+
     const data = getValues();
+
     mutation.mutate({
       ...data,
+      start_time: new Date(data.start_time).toISOString(),
       type: Number(data.type),
       ...(Number(data.type) === 2 && {
         duration: data.duration,
       }),
     });
   };
+
+  React.useEffect(() => {
+    if (id && readMeetingForEdit.data) {
+      Object.keys(initState).forEach((key: any) => {
+        if (key in readMeetingForEdit.data.meeting) {
+          let value: any = null;
+          if (key === 'start_time') {
+            value = readMeetingForEdit.data.meeting[key].substring(0, 16);
+          } else {
+            value = readMeetingForEdit.data.meeting[key];
+          }
+          setValue(key, value, {
+            shouldDirty: true,
+          });
+        }
+      });
+    }
+  }, [id, readMeetingForEdit]);
 
   React.useEffect(() => () => reset(), []);
 
@@ -154,7 +188,7 @@ const MeetingCreatePage: React.FC<MeetingCreatePageProps> = () => {
                   name="password"
                   type="password"
                   placeholder="비밀번호"
-                  className="w-full focus:outline-none focus:border-gray-500 p-3 border-2  text-lg border-gray-200 transition-colors"
+                  className="w-full input"
                 />
                 {Boolean(errors.password) && (
                   <FormErrorMessage msg={errors.password?.message} />
@@ -172,7 +206,7 @@ const MeetingCreatePage: React.FC<MeetingCreatePageProps> = () => {
                   name="start_time"
                   type="datetime-local"
                   placeholder="회의 시작시간"
-                  className="w-full focus:outline-none focus:border-gray-500 p-3 border-2  text-lg border-gray-200 transition-colors"
+                  className="w-full input"
                 />
                 {Boolean(errors.start_time) && (
                   <FormErrorMessage msg={errors.start_time?.message} />
@@ -204,11 +238,7 @@ const MeetingCreatePage: React.FC<MeetingCreatePageProps> = () => {
                 <label className="block text-gray-800 mt-3 mb-1 font-sans font-bold">
                   회의 타입
                 </label>
-                <select
-                  ref={register}
-                  name="type"
-                  className="w-full focus:outline-none focus:border-gray-500 p-3 border-2  text-lg border-gray-200 transition-colors"
-                >
+                <select ref={register} name="type" className="w-full input">
                   <option value={1}>즉석 회의</option>
                   <option value={2}>예약 회의</option>
                 </select>
@@ -226,7 +256,7 @@ const MeetingCreatePage: React.FC<MeetingCreatePageProps> = () => {
                     name="duration"
                     type="text"
                     placeholder="회의시간"
-                    className="w-full focus:outline-none focus:border-gray-500 p-3 border-2  text-lg border-gray-200 transition-colors"
+                    className="w-full input"
                   />
                   {Boolean(errors.duration) && (
                     <FormErrorMessage msg={errors.duration?.message} />
@@ -245,7 +275,7 @@ const MeetingCreatePage: React.FC<MeetingCreatePageProps> = () => {
                   name="agenda"
                   type="text"
                   placeholder="설명"
-                  className="w-full focus:outline-none focus:border-gray-500 p-3 border-2  text-lg border-gray-200 transition-colors;"
+                  className="w-full input"
                 />
                 {Boolean(errors.agenda) && (
                   <FormErrorMessage msg={errors.agenda?.message} />

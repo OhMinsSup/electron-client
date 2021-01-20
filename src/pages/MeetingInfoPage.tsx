@@ -52,6 +52,12 @@ const MeetingInfoPage: React.FC<MeetingInfoPageProps> = () => {
     }
   }, [id]);
 
+  const onModfiy = React.useCallback(() => {
+    if (id) {
+      history.push(`/meeting/create?id=${id}`);
+    }
+  }, [id]);
+
   const onJoin = React.useCallback(() => {
     const { ZOOM_API_KEY, ZOOM_SECRET_KEY } = config;
     ZoomMtg.generateSignature({
@@ -125,7 +131,7 @@ const MeetingInfoPage: React.FC<MeetingInfoPageProps> = () => {
                     <time dateTime={data.meeting.created_at as any}>
                       {data && data.meeting && data.meeting.start_time
                         ? format(
-                            new Date(data.meeting.start_time),
+                            new Date(data.meeting.start_time.substring(0, 16)),
                             `yyyy-MM-dd HH:mm a`,
                           )
                         : ''}
@@ -199,12 +205,15 @@ const MeetingInfoPage: React.FC<MeetingInfoPageProps> = () => {
                   </dd>
                 </div>
               </dl>
-              <div className="grid grid-cols-2 gap-x-4 px-4 py-4">
+              <div className="grid grid-cols-3 gap-x-4 px-4 py-4">
                 <Button color="lightGray" size="large" onClick={onDelete}>
                   삭제
                 </Button>
                 <Button size="large" onClick={onJoin}>
                   참여
+                </Button>
+                <Button size="large" onClick={onModfiy}>
+                  수정
                 </Button>
               </div>
             </article>

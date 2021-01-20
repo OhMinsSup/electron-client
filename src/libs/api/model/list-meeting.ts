@@ -5,7 +5,7 @@ export interface ListMeetingModel {
   host_id: string;
   id: number;
   join_url: string;
-  start_time: Date;
+  start_time: any;
   timezone: string;
   topic: string;
   type: number;

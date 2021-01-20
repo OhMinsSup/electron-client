@@ -4,7 +4,7 @@ const authorized = require('../middlewares/authorized');
 
 const user = Router();
 
-user.get('/', authorized, (req, res) =>
+user.get('/me', authorized, (req, res) =>
   res.status(200).json({
     oK: false,
     error: null,

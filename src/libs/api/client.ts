@@ -33,24 +33,24 @@ const client = axios.create({
 
 client.interceptors.response.use(
   (config) => config,
-    // 오류 응답을 처리
-    async (error) => {
-      if (error.response.status === 401) {
-        console.info('🚀 refreshing....');
-        const { data, status } = await axios.post(`${serverURL}/auth/refresh`, {
-          refreshToken: refreshTokenFn(),
-        });
+  // 오류 응답을 처리
+  async (error) => {
+    if (error.response.status === 401) {
+      console.info('🚀 refreshing....');
+      const { data, status } = await axios.post(`${serverURL}/auth/refresh`, {
+        refreshToken: refreshTokenFn(),
+      });
 
-        if (status === 200) {
-          const { accessToken, refreshToken } = data;
-          accessTokenFn(accessToken);
-          refreshTokenFn(refreshToken);
-          console.log('🚀 refresh success...');
-        }
+      if (status === 200) {
+        const { accessToken, refreshToken } = data;
+        accessTokenFn(accessToken);
+        refreshTokenFn(refreshToken);
+        console.log('🚀 refresh success...');
       }
-      
-      return Promise.reject(error);
-    },
+    }
+
+    return Promise.reject(error);
+  },
 );
 
 export const AuthAPI = {
@@ -64,7 +64,7 @@ export const AuthAPI = {
 export const UserAPI = {
   user: () =>
     client
-      .get<UserResponse>('/user/', {
+      .get<UserResponse>('/user/me', {
         headers: {
           Authorization: `Bearer ${accessTokenFn()}`,
         },
