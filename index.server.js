@@ -4,7 +4,9 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const fileUpload = require('express-fileupload');
 const FileStore = require('session-file-store')(session);
+const fs = require('fs');
 
 const routes = require('./server');
 const hydrateUser = require('./server/middlewares/auth');
@@ -15,6 +17,13 @@ const allowedHosts = [];
 
 if (process.env.NODE_ENV === 'development') {
   allowedHosts.push(/^http:\/\/localhost/);
+}
+
+try {
+  fs.accessSync('upload');
+} catch (error) {
+  console.log('upload 폴더가 없으므로 생성합니다.');
+  fs.mkdirSync('upload');
 }
 
 app.use(
@@ -28,7 +37,14 @@ app.use(
     },
   }),
 );
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(
+  fileUpload({
+    useTempFiles: true,
+    tempFileDir: 'upload',
+  }),
+);
 app.use(cookieParser());
 
 app.use(
@@ -46,9 +62,9 @@ app.use(
 );
 app.use(hydrateUser);
 
-app.use(routes);
+app.get('/', (_req, res) => res.status(200).json('ok'));
 
-app.get('/', (_req, res) => res.json('ok'));
+app.use(routes);
 
 app.listen(5000, () => {
   console.log('🚀 server running http://localhost:5000');
