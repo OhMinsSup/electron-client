@@ -19,7 +19,7 @@ const PlainNavLink: React.FC<PlainNavLinkProps> = ({
 }) => (
   <NavLink
     to={to}
-    className={className}
+    className={`${className}  focus:no-underline hover:no-underline hover:text-gray-700`}
     onClick={onClick}
     activeClassName={activeClassName}
     activeStyle={activeStyle}
