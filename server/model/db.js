@@ -8,7 +8,10 @@ const { DB_NAME, DB_USERNAME, DB_PASSWORD, NODE_ENV } = process.env;
 const options =
   NODE_ENV === 'production'
     ? {
-        host: process.env.DATABASE_URL || '',
+        database: DB_NAME,
+        username: DB_USERNAME,
+        password: DB_PASSWORD,
+        host: process.env.DB_HOST || '',
         dialect: 'postgres',
         pool: {
           max: 5,
@@ -16,9 +19,12 @@ const options =
           acquire: 30000,
           idle: 10000,
         },
-        port: 5432,
+        ssl: true,
       }
     : {
+        database: DB_NAME,
+        username: DB_USERNAME,
+        password: DB_PASSWORD,
         host: 'localhost',
         dialect: 'sqlite',
         pool: {
@@ -29,6 +35,6 @@ const options =
         storage: 'server/db/db.sqlite',
       };
 
-const db = new Sequelize(DB_NAME, DB_USERNAME, DB_PASSWORD, options);
+const db = new Sequelize(options);
 
 module.exports = db;

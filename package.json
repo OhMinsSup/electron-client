@@ -57,7 +57,7 @@
     "start:main": "env-cmd -f .env.development electron -r ./scripts/babel-register.js  .",
     "start:web": "env-cmd -f .env.development react-scripts start",
     "start:web-dev": "react-scripts start",
-    "start": "node index.server.js",
+    "start": "cross-env NODE_ENV=production node index.server.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
