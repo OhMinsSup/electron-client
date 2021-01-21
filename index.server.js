@@ -58,7 +58,6 @@ app.use(
   }),
 );
 app.use(cookieParser());
-console.log(process.env.SESSION_SECRET);
 app.use(
   session({
     secret: process.env.SESSION_SECRET, // 암호화하는 데 쓰일 키

@@ -8,7 +8,7 @@ const { DB_NAME, DB_USERNAME, DB_PASSWORD, NODE_ENV } = process.env;
 const options =
   NODE_ENV === 'production'
     ? {
-        host: process.env.POSTGRES_HOST || '',
+        host: process.env.DATABASE_URL || '',
         dialect: 'postgres',
         pool: {
           max: 5,
