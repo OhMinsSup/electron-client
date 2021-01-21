@@ -12,6 +12,7 @@ const options =
         username: DB_USERNAME,
         password: DB_PASSWORD,
         host: process.env.DB_HOST || '',
+        port: 5432,
         dialect: 'postgres',
         pool: {
           max: 5,
@@ -19,7 +20,12 @@ const options =
           acquire: 30000,
           idle: 10000,
         },
-        ssl: true,
+        dialectOptions: {
+          ssl: {
+            require: true,
+            rejectUnauthorized: false,
+          },
+        },
       }
     : {
         database: DB_NAME,
