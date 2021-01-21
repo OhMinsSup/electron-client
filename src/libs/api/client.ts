@@ -22,9 +22,13 @@ export const refreshTokenFn = (token?: string) =>
     : localStorage.getItem('@zoom::refreshToken') || '';
 
 export const serverURL: string =
-  process.env.NODE_ENV === 'development' ? 'http://localhost:5000/api' : '';
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:5000/api'
+    : 'https://zoom-sdk-api.herokuapp.com/api';
 export const clientURL: string =
-  process.env.NODE_ENV === 'development' ? 'http://localhost:4000' : '';
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:4000'
+    : 'https://zoom-sdk.netlify.app';
 
 const client = axios.create({
   baseURL: serverURL,
