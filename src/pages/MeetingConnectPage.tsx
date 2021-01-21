@@ -37,8 +37,12 @@ const MeetingConnectPage: React.FC<MeetingConnectPageProps> = () => {
             success: (joinRes: any) => {
               console.log('success joinRes', joinRes);
 
+              ZoomMtg.record({
+                record: true,
+              });
+
               ZoomMtg.showRecordFunction({
-                show: true,
+                show: false,
               });
 
               ZoomMtg.getAttendeeslist({
