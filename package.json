@@ -53,13 +53,13 @@
     "yup": "^0.32.8"
   },
   "scripts": {
+    "build:web": "react-scripts build",
+    "tailwind:build": "tailwind build ./src/styles/tailwind.css -o ./src/styles/styles.css",
     "start:server": "cross-env NODE_ENV=development nodemon index.server.js",
     "start:main": "env-cmd -f .env.development electron -r ./scripts/babel-register.js  .",
     "start:web": "env-cmd -f .env.development react-scripts start",
-    "tailwind:build": "tailwind build ./src/styles/tailwind.css -o ./src/styles/styles.css",
-    "start": "pm2 start index.server.js",
     "start:web-dev": "react-scripts start",
-    "build:web": "react-scripts build",
+    "start": "pm2 start index.server.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
