@@ -53,7 +53,6 @@
     "yup": "^0.32.8"
   },
   "scripts": {
-    "preinstall": "yarn global add pm2",
     "build:web": "react-scripts build",
     "tailwind:build": "tailwind build ./src/styles/tailwind.css -o ./src/styles/styles.css",
     "start:server": "cross-env NODE_ENV=development nodemon index.server.js",
