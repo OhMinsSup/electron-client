@@ -7,7 +7,7 @@ interface UserInfoPageProps {}
 const UserInfoPage: React.FC<UserInfoPageProps> = () => (
   <>
     <Header />
-    <div className="h-screen w-screen">
+    <div className="w-screen overflow-y-scroll">
       <div className="pb-16">
         <Switch>
           <Route

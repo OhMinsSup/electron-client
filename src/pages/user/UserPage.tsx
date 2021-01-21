@@ -8,7 +8,7 @@ import RecordingsTab from './RecordingsTab';
 interface UserPageProps
   extends RouteComponentProps<{
     id: string;
-    tab?: 'meeting' | 'recording' | 'test';
+    tab?: 'meeting' | 'recording';
   }> {}
 const UserPage: React.FC<UserPageProps> = ({ match }) => {
   const { id, tab } = match.params;
@@ -20,6 +20,6 @@ const UserPage: React.FC<UserPageProps> = ({ match }) => {
       <Route path="/@:id/recording" exact component={RecordingsTab} />
     </div>
   );
-}
+};
 
 export default UserPage;

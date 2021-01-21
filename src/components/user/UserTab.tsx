@@ -5,13 +5,12 @@ import PlainNavLink from '../common/PlainNavLink';
 
 interface UserTabProps {
   id: string;
-  tab: 'meeting' | 'recording' | 'test';
+  tab: 'meeting' | 'recording';
 }
 
 const tabIndexMap = {
   meeting: 0,
   recording: 1,
-  test: 2,
 };
 
 const UserTab: React.FC<UserTabProps> = ({ id, tab }) => {
@@ -28,12 +27,13 @@ const UserTab: React.FC<UserTabProps> = ({ id, tab }) => {
         <TabItem exact to={withPrefix('recording')}>
           레코딩
         </TabItem>
-        <TabItem exact to={withPrefix('test')}>
+        {/* <TabItem exact to={withPrefix('test')}>
           로그
-        </TabItem>
+        </TabItem> */}
         <Indicator
           style={{
-            left: `${tabIndex * 33.3333}%`,
+            // left: `${tabIndex * 33.3333}%`,
+            left: `${tabIndex * 50}%`,
           }}
         />
       </TabWrapper>
@@ -81,6 +81,7 @@ const Indicator = styled.div`
   transition: 0.25s left ease-in-out;
 
   @media (max-width: 768px) {
-    width: 33.3333%;
+    /* width: 33.3333%; */
+    width: 50%;
   }
 `;

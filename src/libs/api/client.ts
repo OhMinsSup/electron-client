@@ -155,4 +155,51 @@ export const MeetingAPI = {
       .then((res) => ({ ...res.data, status: res.status })),
 };
 
+export const fileDownloadAPI = (
+  data: any,
+  filename: string,
+  mime: string,
+  bom?: any,
+) => {
+  const blobData = typeof bom !== 'undefined' ? [bom, data] : [data];
+  const blob = new Blob(blobData, { type: mime || 'application/octet-stream' });
+  if (typeof window.navigator.msSaveBlob !== 'undefined') {
+    window.navigator.msSaveBlob(blob, filename);
+  } else {
+    const blobURL =
+      window.URL && window.URL.createObjectURL
+        ? window.URL.createObjectURL(blob)
+        : window.webkitURL.createObjectURL(blob);
+    const tempLink = document.createElement('a');
+    tempLink.style.display = 'none';
+    tempLink.href = blobURL;
+    tempLink.setAttribute('download', filename);
+
+    if (typeof tempLink.download === 'undefined') {
+      tempLink.setAttribute('target', '_blank');
+    }
+
+    document.body.appendChild(tempLink);
+    tempLink.click();
+
+    // Fixes "webkit blob resource error 1"
+    setTimeout(() => {
+      document.body.removeChild(tempLink);
+      window.URL.revokeObjectURL(blobURL);
+    }, 200);
+  }
+};
+
+export const browserFileDownloadAPI = (
+  name: string,
+  url: string,
+  type: string,
+) =>
+  axios
+    .get(url, {
+      responseType: 'blob',
+    })
+    .then((response) => fileDownloadAPI(response.data, name, type))
+    .catch(console.error);
+
 export default client;

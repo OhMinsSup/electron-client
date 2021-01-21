@@ -1,8 +1,8 @@
 import React from 'react';
 import { useRecoilState } from 'recoil';
-import { userFn } from '../../libs/api/client';
-import type { UserModel } from '../../libs/api/model/user';
-import { userState } from '../../store/user';
+import { userFn } from './libs/api/client';
+import type { UserModel } from './libs/api/model/user';
+import { userState } from './store/user';
 
 interface CoreProps {}
 const Core: React.FC<CoreProps> = () => {

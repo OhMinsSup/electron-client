@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
 import { useQuery } from 'react-query';
-import styled from 'styled-components';
 import ListItem from '../../components/card/ListItem';
 import Select from '../../components/common/Select';
 import { MeetingAPI } from '../../libs/api/client';
-import palette from '../../libs/styles/palette';
+import EmptyBlock from '../../components/common/Empty';
 
 interface MeetingsTabProps
   extends RouteComponentProps<{
@@ -50,7 +49,7 @@ const MeetingsTab: React.FC<MeetingsTabProps> = ({ match }) => {
   if (isLoading) return <>Loading....</>;
 
   return (
-    <>
+    <div className="px-2">
       <Select listType={listType} onClick={onClick} />
       {data.meetings && data.meetings.length ? (
         data.meetings.map((meeting: any) => (
@@ -61,23 +60,8 @@ const MeetingsTab: React.FC<MeetingsTabProps> = ({ match }) => {
           <div className="message">진행중인 미팅룸이 없습니다.</div>
         </EmptyBlock>
       )}
-    </>
+    </div>
   );
 };
 
 export default MeetingsTab;
-
-const EmptyBlock = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  margin-top: 6rem;
-  margin-bottom: 3rem;
-  .message {
-    font-size: 2rem;
-    color: ${palette.gray6};
-    margin-top: 3rem;
-    margin-bottom: 2rem;
-  }
-`;

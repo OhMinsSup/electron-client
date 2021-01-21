@@ -6,7 +6,7 @@ import MeetingConnectPage from './pages/MeetingConnectPage';
 import useZoomDisplayNone from './libs/hooks/useZoomDisplayNone';
 import LoginPage from './pages/LoginPage';
 import UserInfoPage from './pages/UserInfoPage';
-import Core from './containers/base/Core';
+import Core from './Core';
 import MeetingCreatePage from './pages/MeetingCreatePage';
 import MeetingInfoPage from './pages/MeetingInfoPage';
 

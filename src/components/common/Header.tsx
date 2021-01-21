@@ -28,7 +28,7 @@ const Header: React.FC<HeaderProps> = () => {
 
   return (
     <>
-      <div className="fixed bg-white shadow-md w-screen">
+      <div className="fixed bg-white shadow-md w-screen z-10">
         <Responsive>
           <Wrapper>
             <Link to="/" className="logo">
@@ -58,7 +58,7 @@ const Header: React.FC<HeaderProps> = () => {
           </Wrapper>
         </Responsive>
       </div>
-      <div className="h-16" />
+      <div className="h-20" />
     </>
   );
 };

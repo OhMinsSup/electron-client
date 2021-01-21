@@ -6,6 +6,8 @@ export interface FileModel {
   publicId: string | null;
   url: string | null;
   isDeleted: boolean;
+  createdAt: any;
+  updatedAt: any;
 }
 
 export interface ListFileResponse {
