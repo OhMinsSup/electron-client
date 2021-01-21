@@ -13,7 +13,7 @@ const db = require('./server/model/db');
 const routes = require('./server');
 const hydrateUser = require('./server/middlewares/auth');
 
-const port = process.env.NODE_ENV === 'production' ? 80 : 5000;
+const port = process.env.NODE_ENV === 'production' ? 8080 : 5000;
 
 const app = express();
 
