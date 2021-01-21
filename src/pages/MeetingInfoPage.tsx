@@ -116,7 +116,7 @@ const MeetingInfoPage: React.FC<MeetingInfoPageProps> = () => {
         <title>{`${data?.meeting.topic} - Meeting Page`} | Zoom SDK</title>
       </Helmet>
       <Header />
-      <div className="min-h-screen w-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen w-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div className="relative z-10 rounded-xl">
             <article className="text-gray-800 leading-6">

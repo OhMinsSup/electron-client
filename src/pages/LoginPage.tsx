@@ -67,7 +67,6 @@ const LoginPageBlock = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: ${palette.gray1};
 
   .spinner {
     width: 100px;
