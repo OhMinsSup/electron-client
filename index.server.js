@@ -13,6 +13,8 @@ const db = require('./server/model/db');
 const routes = require('./server');
 const hydrateUser = require('./server/middlewares/auth');
 
+const port = process.env.NODE_ENV === 'production' ? 80 : 5000;
+
 const app = express();
 
 const allowedHosts = ['https://zoom-sdk.netlify.app'];
@@ -87,6 +89,6 @@ db.authenticate().then(
   },
 );
 
-app.listen(5000, () => {
+app.listen(port, () => {
   console.log('🚀 server running http://localhost:5000');
 });
