@@ -15,7 +15,7 @@ const hydrateUser = require('./server/middlewares/auth');
 
 const app = express();
 
-const allowedHosts = [];
+const allowedHosts = ['https://zoom-sdk.netlify.app'];
 
 if (process.env.NODE_ENV === 'development') {
   allowedHosts.push(/^http:\/\/localhost/);
@@ -64,6 +64,7 @@ app.use(
     saveUninitialized: true, // 세션이 저장되기 전 uninitialized 상태로 미리 만들어 저장
     cookie: {
       maxAge: 31536000,
+      secure: process.env.NODE_ENV === 'production',
     },
     store: new FileStore({
       path: 'tmp/.session',
