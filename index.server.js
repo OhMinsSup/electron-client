@@ -56,7 +56,7 @@ app.use(
   }),
 );
 app.use(cookieParser());
-
+console.log(process.env.SESSION_SECRET);
 app.use(
   session({
     secret: process.env.SESSION_SECRET, // 암호화하는 데 쓰일 키
@@ -64,7 +64,7 @@ app.use(
     saveUninitialized: true, // 세션이 저장되기 전 uninitialized 상태로 미리 만들어 저장
     cookie: {
       maxAge: 31536000,
-      secure: process.env.NODE_ENV === 'production',
+      // secure: process.env.NODE_ENV === 'production',
     },
     store: new FileStore({
       path: 'tmp/.session',
