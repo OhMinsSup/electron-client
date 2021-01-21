@@ -27,5 +27,4 @@ yarn-error.log*
 .eslintcache
 
 /tmp
-
-client_secret.json
+/server/db/db.sqlite
