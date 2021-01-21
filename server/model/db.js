@@ -16,6 +16,7 @@ const options =
           acquire: 30000,
           idle: 10000,
         },
+        port: 5432,
       }
     : {
         host: 'localhost',
