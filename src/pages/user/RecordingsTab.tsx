@@ -9,7 +9,7 @@ const RecordingsTab: React.FC<RecordingsTabProps> = () => {
   console.log('recording');
   const { isLoading, error } = useQuery<any, any, any>(
     ['myRecordingData'],
-    () => RecordingAPI.recordingUser(),
+    () => RecordingAPI.recordings(),
     {
       refetchInterval: 60000,
     },

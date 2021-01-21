@@ -4,7 +4,7 @@ import queryString from 'query-string';
 import type { ListMeetingResponse } from './model/list-meeting';
 import type { WriteMeetingResponse } from './model/write-meeting';
 import type { TokensResponse, UserResponse } from './model/user';
-import { ListRecordingResponse } from './model/list-recording';
+import type { ListFileResponse, UploadFileResponse } from './model/file';
 
 export const userFn = (user?: any) =>
   user
@@ -73,19 +73,38 @@ export const UserAPI = {
 };
 
 export const RecordingAPI = {
-  recordingUser: (params?: any) =>
+  recordings: () =>
     client
-      .get<ListRecordingResponse>(
-        '/recording?'.concat(
-          isEmpty(params) ? '' : queryString.stringify(params),
-        ),
-        {
-          headers: {
-            Authorization: `Bearer ${accessTokenFn()}`,
-          },
+      .get<ListFileResponse>('/recording', {
+        headers: {
+          Authorization: `Bearer ${accessTokenFn()}`,
         },
-      )
+      })
       .then((res) => ({ ...res.data, status: res.status })),
+  deleteRecording: (fileId: number) =>
+    client
+      .delete(`/recording/${fileId}`, {
+        headers: {
+          Authorization: `Bearer ${accessTokenFn()}`,
+        },
+      })
+      .then((res) => ({ ...res.data, status: res.status })),
+  uploadRecording: async (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const res = await client.post<UploadFileResponse>(
+      '/recording/upload',
+      formData,
+      {
+        headers: {
+          'Content-Type': ' multipart/form-data',
+          Authorization: `Bearer ${accessTokenFn()}`,
+        },
+      },
+    );
+
+    return { ...res.data, status: res.status };
+  },
 };
 
 export const MeetingAPI = {
