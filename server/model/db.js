@@ -1,4 +1,7 @@
 const { Sequelize } = require('sequelize');
+const pg = require('pg');
+
+pg.defaults.parseInt8 = true; // fixes issue: umbers returning as string.
 
 const { DB_NAME, DB_USERNAME, DB_PASSWORD, NODE_ENV } = process.env;
 
