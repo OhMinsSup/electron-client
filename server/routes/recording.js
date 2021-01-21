@@ -3,6 +3,9 @@ const fs = require('fs');
 const path = require('path');
 const cloudinary = require('cloudinary');
 
+const authorized = require('../middlewares/authorized');
+const File = require('../model/File');
+
 const {
   CLOUDINARY_API_SECRET,
   CLOUDINARY_APIKEY,
@@ -17,14 +20,54 @@ cloudinary.config({
 
 const recording = Router();
 
-recording.get('/', (req, res) => {
+recording.get('/', authorized, async (req, res) => {
+  const file = await File.findAndCountAll({
+    where: {
+      isDeleted: false,
+    },
+  });
+
   res.status(200).json({
     ok: true,
     error: null,
+    file,
   });
 });
 
-recording.post('/upload', async (req, res) => {
+recording.delete('/:fileId', authorized, async (req, res) => {
+  const { fileId } = req.params;
+
+  try {
+    const file = await File.findOne({
+      id: fileId,
+    });
+
+    if (!file) {
+      res.status(404).json({
+        ok: false,
+        error: 'Error: File Data is NotFound',
+      });
+      return;
+    }
+
+    await file.update({
+      isDeleted: true,
+    });
+
+    res.status(200).json({
+      ok: true,
+      error: null,
+    });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({
+      ok: false,
+      error: 'Error: 4000: Data is NotFound',
+    });
+  }
+});
+
+recording.post('/upload', authorized, async (req, res) => {
   const { file } = req.files;
 
   if (!file) {
@@ -52,18 +95,33 @@ recording.post('/upload', async (req, res) => {
       return;
     }
 
+    const userId = req.session.user.id;
     const filename = file.name.split('.')[0];
+
+    const zoomFile = await File.create({
+      userId,
+      filename,
+      mimeType: file.mimetype,
+    });
+
+    const public_id = `zoom/${userId}/${zoomFile.id}/${filename}`;
+
     const response = await cloudinary.v2.uploader.upload(file.tempFilePath, {
       resource_type: 'video',
       chunk_size: 6000000,
-      public_id: `zoom/${filename}`,
+      public_id,
+    });
+
+    await zoomFile.update({
+      publicId: public_id,
+      url: response.secure_url,
     });
 
     res.status(200).json({
       ok: true,
       error: null,
+      publicId: public_id,
       url: response.secure_url,
-      path: `zoom/${filename}`,
       name: filename,
     });
   } catch (e) {

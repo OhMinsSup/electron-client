@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 require('./server/config/env');
 const express = require('express');
 const cors = require('cors');
@@ -8,6 +9,7 @@ const fileUpload = require('express-fileupload');
 const FileStore = require('session-file-store')(session);
 const fs = require('fs');
 
+const db = require('./server/model/db');
 const routes = require('./server');
 const hydrateUser = require('./server/middlewares/auth');
 
@@ -19,10 +21,17 @@ if (process.env.NODE_ENV === 'development') {
   allowedHosts.push(/^http:\/\/localhost/);
 }
 
+// tmp dir create
+try {
+  fs.accessSync('tmp');
+} catch (error) {
+  fs.mkdirSync('tmp');
+}
+
+// upload dir create
 try {
   fs.accessSync('tmp/upload');
 } catch (error) {
-  console.log('upload 폴더가 없으므로 생성합니다.');
   fs.mkdirSync('tmp/upload');
 }
 
@@ -37,6 +46,7 @@ app.use(
     },
   }),
 );
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(
@@ -65,6 +75,16 @@ app.use(hydrateUser);
 app.get('/', (_req, res) => res.status(200).json('ok'));
 
 app.use(routes);
+
+db.authenticate().then(
+  () => {
+    db.sync();
+    console.log('🚀  DB Connection has been established');
+  },
+  (err) => {
+    console.error('🚒  Unable to connect to the DB:', err);
+  },
+);
 
 app.listen(5000, () => {
   console.log('🚀 server running http://localhost:5000');
