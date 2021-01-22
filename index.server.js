@@ -74,10 +74,9 @@ app.use(
     cookie: {
       secure: process.env.NODE_ENV === 'production',
       httpOnly: true,
-      ...(process.env.NODE_ENV === 'production' && {
-        domain: '.zoom-sdk.netlify.app',
-      }),
+      domain: process.env.NODE_ENV === 'production' ? '.zoom-sdk.netlify.app' : '',
     },
+    proxy: true,
     store:
       process.env.NODE_ENV === 'production'
         ? new Store({
