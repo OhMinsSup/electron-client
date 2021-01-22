@@ -17,7 +17,7 @@ const port = process.env.PORT || 5000;
 
 const app = express();
 
-const allowedHosts = [/https:\/\/zoom-sdk.netlify.com/];
+const allowedHosts = [/https:\/\/zoom-sdk.netlify.app/];
 
 if (process.env.NODE_ENV === 'development') {
   allowedHosts.push(/^http:\/\/localhost/);
