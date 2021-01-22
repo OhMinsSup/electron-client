@@ -17,8 +17,6 @@ if (process.env.NODE_ENV === 'production') {
   Store = require('session-file-store')(session);
 }
 
-const redisClient = redis.createClient();
-
 const db = require('./server/model/db');
 const routes = require('./server');
 const hydrateUser = require('./server/middlewares/auth');
@@ -80,7 +78,12 @@ app.use(
     },
     store:
       process.env.NODE_ENV === 'production'
-        ? new Store({ client: redisClient, url: process.env.REDIS_URL })
+        ? new Store({
+            client: redis.createClient({
+              url: process.env.REDIS_URL,
+            }),
+            url: process.env.REDIS_URL,
+          })
         : new Store({
             path: 'tmp/.session',
           }),
