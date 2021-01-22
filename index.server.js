@@ -45,7 +45,6 @@ try {
   fs.mkdirSync('tmp/upload');
 }
 
-app.set('trust proxy', 1);
 app.use(
   cors({
     credentials: true,
@@ -76,6 +75,7 @@ app.use(
       maxAge: 31536000,
       secure: process.env.NODE_ENV === 'production',
       httpOnly: true,
+      domain: process.env.NODE_ENV === 'production' && '.zoom-sdk.netlify.app',
     },
     proxy: true,
     store:
