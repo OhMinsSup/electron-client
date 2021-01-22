@@ -79,10 +79,7 @@ app.use(
     store:
       process.env.NODE_ENV === 'production'
         ? new Store({
-            client: redis.createClient({
-              url: process.env.REDIS_URL,
-            }),
-            url: process.env.REDIS_URL,
+            client: redis.createClient(process.env.REDIS_URL),
           })
         : new Store({
             path: 'tmp/.session',
