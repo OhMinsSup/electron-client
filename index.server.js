@@ -74,7 +74,10 @@ app.use(
     saveUninitialized: true, // 세션이 저장되기 전 uninitialized 상태로 미리 만들어 저장
     cookie: {
       maxAge: 31536000,
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
     },
+    proxy: true,
     store:
       process.env.NODE_ENV === 'production'
         ? new Store({
