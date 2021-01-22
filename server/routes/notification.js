@@ -24,7 +24,6 @@ notification.post('/', async (req, res) => {
     form.append('to', 'mins5190@naver.com');
     form.append('subject', 'ZoomSDK 웹훅');
     form.append('template', 'zoom_web_hook');
-    form.append('v:event_type', event.event);
 
     await got.post(
       `https://api.mailgun.net/v3/${process.env.MAIL_GUN_DOMAIN}/messages`,
