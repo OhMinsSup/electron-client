@@ -27,7 +27,7 @@ export const serverURL: string =
     : 'https://zoom-sdk-api.herokuapp.com/api';
 export const clientURL: string =
   process.env.NODE_ENV === 'development'
-    ? 'http://localhost:4000'
+    ? 'http://localhost:3000'
     : 'https://zoom-sdk.netlify.app';
 
 const client = axios.create({

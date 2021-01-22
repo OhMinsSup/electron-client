@@ -60,7 +60,7 @@
     "tailwind:build": "tailwind build ./src/styles/tailwind.css -o ./src/styles/styles.css",
     "start:server": "cross-env NODE_ENV=development nodemon index.server.js",
     "start:main": "env-cmd -f .env.development electron -r ./scripts/babel-register.js  .",
-    "start:web": "env-cmd -f .env.development react-scripts start",
+    "start:web": "cross-env PORT=3000 env-cmd -f .env.development react-scripts start",
     "start:web-dev": "react-scripts start",
     "start": "cross-env NODE_ENV=production node index.server.js",
     "test": "react-scripts test",
