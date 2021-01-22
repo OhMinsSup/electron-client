@@ -72,12 +72,12 @@ app.use(
     resave: false, // 세션을 언제나 저장할지 설정함
     saveUninitialized: true, // 세션이 저장되기 전 uninitialized 상태로 미리 만들어 저장
     cookie: {
-      maxAge: 31536000,
       secure: process.env.NODE_ENV === 'production',
       httpOnly: true,
-      domain: process.env.NODE_ENV === 'production' && '.zoom-sdk.netlify.app',
+      ...(process.env.NODE_ENV === 'production' && {
+        domain: '.zoom-sdk.netlify.app',
+      }),
     },
-    proxy: true,
     store:
       process.env.NODE_ENV === 'production'
         ? new Store({
