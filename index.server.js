@@ -6,8 +6,18 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const fileUpload = require('express-fileupload');
-const FileStore = require('session-file-store')(session);
 const fs = require('fs');
+const redis = require('redis');
+
+let Store;
+
+if (process.env.NODE_ENV === 'production') {
+  Store = require('connect-redis')(session);
+} else {
+  Store = require('session-file-store')(session);
+}
+
+const redisClient = redis.createClient();
 
 const db = require('./server/model/db');
 const routes = require('./server');
@@ -68,9 +78,12 @@ app.use(
       maxAge: 31536000,
       secure: process.env.NODE_ENV === 'production',
     },
-    store: new FileStore({
-      path: 'tmp/.session',
-    }),
+    store:
+      process.env.NODE_ENV === 'production'
+        ? new Store({ client: redisClient, url: process.env.REDIS_URL })
+        : new Store({
+            path: 'tmp/.session',
+          }),
   }),
 );
 app.use(hydrateUser);
