@@ -14,7 +14,7 @@ import './styles/global.css';
 
 const queryClient = new QueryClient();
 
-ReactDOM.render(
+const Root = () => (
   <React.StrictMode>
     <HelmetProvider>
       <RecoilRoot>
@@ -26,9 +26,14 @@ ReactDOM.render(
         </QueryClientProvider>
       </RecoilRoot>
     </HelmetProvider>
-  </React.StrictMode>,
-  document.getElementById('root'),
+  </React.StrictMode>
 );
+
+if (process.env.NODE_ENV === 'production') {
+  ReactDOM.hydrate(<Root />, document.getElementById('root'));
+} else {
+  ReactDOM.render(<Root />, document.getElementById('root'));
+}
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
